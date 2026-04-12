@@ -11,7 +11,7 @@ spec:
     path: kustomize/base/generated/account-service
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: dev-infra
+    namespace: apps
   syncPolicy:
     automated:
       prune: true

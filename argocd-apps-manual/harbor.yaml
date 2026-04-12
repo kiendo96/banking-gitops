@@ -11,7 +11,7 @@ spec:
     path: kustomize/base/generated/harbor
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: dev-infra
+    namespace: harbor
   syncPolicy:
     automated:
       prune: true

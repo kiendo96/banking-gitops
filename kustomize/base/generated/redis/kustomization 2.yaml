@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - redis/templates/configmap.yaml
+  - redis/templates/headless-svc.yaml
+  - redis/templates/health-configmap.yaml
+  - redis/templates/master/application.yaml
+  - redis/templates/master/pdb.yaml
+  - redis/templates/master/service.yaml
+  - redis/templates/master/serviceaccount.yaml
+  - redis/templates/networkpolicy.yaml
+  - redis/templates/replicas/application.yaml
+  - redis/templates/replicas/pdb.yaml
+  - redis/templates/replicas/service.yaml
+  - redis/templates/replicas/serviceaccount.yaml
+  - redis/templates/scripts-configmap.yaml

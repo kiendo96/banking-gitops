@@ -11,7 +11,7 @@ spec:
     path: kustomize/base/generated/redis
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: dev-infra
+    namespace: data
   syncPolicy:
     automated:
       prune: true
