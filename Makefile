@@ -105,6 +105,8 @@ external-secrets: repo-add
 		--set installCRDs=true \
 		-f $(HELM_RESOURCE_DIR)/eso_values.yaml \
 		--output-dir $(KUSTOMIZE_GEN_DIR)/external-secrets
+	@echo "🔧 Removing CEL validations from CRDs to bypass local K8s validation budget limit..."
+	@python3 -c 'import os, re; d="$(KUSTOMIZE_GEN_DIR)/external-secrets/external-secrets/templates/crds"; [open(os.path.join(d, f), "w").write(re.sub(r"(?m)^ *x-kubernetes-validations:.*\n(?:^ *-.*\n)+", "", open(os.path.join(d, f)).read())) for f in os.listdir(d) if f.endswith(".yaml")]'
 	@$(MAKE) --no-print-directory _gen-kustomization DIR=$(KUSTOMIZE_GEN_DIR)/external-secrets
 
 jenkins: repo-add
