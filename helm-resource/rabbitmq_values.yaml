@@ -1,0 +1,3 @@
+auth:
+  existingPasswordSecret: vault-rabbitmq-secret
+  existingErlangSecret: vault-rabbitmq-secret

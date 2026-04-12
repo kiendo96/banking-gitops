@@ -1,0 +1,7 @@
+postgresql:
+  password: ""
+  repmgrPassword: ""
+global:
+  postgresql:
+    auth:
+      existingSecret: vault-postgres-secret

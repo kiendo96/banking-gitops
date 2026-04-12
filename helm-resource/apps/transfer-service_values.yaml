@@ -1,0 +1,11 @@
+replicaCount: 1
+image:
+  repository: harbor.local/banking-demo/transfer-service
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8083
+
+resources: {}

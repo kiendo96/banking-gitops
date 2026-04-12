@@ -1,0 +1,2 @@
+controller:
+  existingSecret: vault-jenkins-secret

@@ -1,0 +1,133 @@
+---
+# Source: postgresql-ha/templates/postgresql/scripts-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-postgresql-ha-postgresql-scripts
+  namespace: "data"
+  labels:
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    app.kubernetes.io/version: 17.6.0
+    helm.sh/chart: postgresql-ha-16.3.2
+    app.kubernetes.io/component: postgresql
+data:
+  pre-stop.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Debug section
+    exec 3>&1
+    exec 4>&2
+
+    # Process input parameters
+    MIN_DELAY_AFTER_PG_STOP_SECONDS=$1
+
+    # Load Libraries
+    . /opt/bitnami/scripts/libpostgresql.sh
+    . /opt/bitnami/scripts/librepmgr.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # Auxiliary functions
+    is_new_primary_ready() {
+        local -a current_primary_node
+        readarray -t current_primary_node < <(repmgr_get_primary_node)
+        local current_primary_host="${current_primary_node[0]}"
+
+        if [[ -n "$current_primary_host" ]] && [[ "$current_primary_host" != "$REPMGR_NODE_NETWORK_NAME" ]]; then
+            info "New primary detected, leaving the cluster..."
+            return 0
+        fi
+
+        info "Waiting for a new primary to be available..."
+        return 1
+    }
+
+    export MODULE="pre-stop-hook"
+    if ! is_boolean_yes "$BITNAMI_DEBUG"; then
+        exec 1>/dev/null
+        exec 2>/dev/null
+    fi
+
+    postgresql_enable_nss_wrapper
+
+    # Prepare env vars for managing roles
+    readarray -t primary_node < <(repmgr_get_upstream_node)
+    primary_host="${primary_node[0]}"
+
+    # Stop postgresql for graceful exit.
+    PG_STOP_INIT=$EPOCHSECONDS
+    postgresql_stop
+
+    if [[ -z "$primary_host" ]] || [[ "$primary_host" = "$REPMGR_NODE_NETWORK_NAME" ]]; then
+        info "Primary node need to wait for a new primary node before leaving the cluster"
+        retry_while is_new_primary_ready 10 5
+    else
+        info "Standby node doesn't need to wait for a new primary switchover. Leaving the cluster"
+    fi
+
+    # Make sure pre-stop hook waits at least 25 seconds after stop of PG to make sure Pgpool-II detects node is down.
+    # default terminationGracePeriodSeconds=30 seconds
+    PG_STOP_DURATION=$((EPOCHSECONDS - PG_STOP_INIT))
+    if (( PG_STOP_DURATION < MIN_DELAY_AFTER_PG_STOP_SECONDS )); then
+        WAIT_TO_PG_POOL_TIME=$((MIN_DELAY_AFTER_PG_STOP_SECONDS - PG_STOP_DURATION))
+        info "Waiting additional $WAIT_TO_PG_POOL_TIME seconds for Pgpool-II to detect node is down"
+        sleep $WAIT_TO_PG_POOL_TIME
+    fi
+  liveness-probe.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Load Libraries
+    . /opt/bitnami/scripts/libpostgresql.sh
+    . /opt/bitnami/scripts/librepmgr.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # Check if PG is ready
+    pg_isready_args=("-U" "postgres" "-p" "$POSTGRESQL_PORT_NUMBER" "-h" "127.0.0.1")
+    is_boolean_yes "$POSTGRESQL_ENABLE_TLS" && pg_isready_args+=("-d" "sslcert=$POSTGRESQL_TLS_CERT_FILE sslkey=$POSTGRESQL_TLS_KEY_FILE")
+    debug_execute pg_isready "${pg_isready_args[@]}"
+
+    # Check if repmgr has split-brain issues
+    postgresql_enable_nss_wrapper
+    repmgr_check_status
+  readiness-probe.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Load Libraries
+    . /opt/bitnami/scripts/libpostgresql.sh
+    . /opt/bitnami/scripts/librepmgr.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # We should not proceed if a standby clone is in progress
+    if ps waux | grep "data standby clone" | grep -qv grep; then
+        echo "standby clone in progress"
+        exit 1
+    fi
+
+    # Then, let's check if PG is responding to queries
+    if [[ $(PGPASSWORD="$POSTGRESQL_PASSWORD" psql -w -U "$POSTGRESQL_USERNAME" -d $POSTGRESQL_DATABASE -h 127.0.0.1 -p "$POSTGRESQL_PORT_NUMBER" -tA -c "SELECT 1" 2> /dev/null || true) = 1 ]]; then
+        # Finally, check if repmgr has split-brain issues
+        postgresql_enable_nss_wrapper
+        repmgr_check_status
+    else
+        echo "connection to database failed"
+        exit 1
+    fi

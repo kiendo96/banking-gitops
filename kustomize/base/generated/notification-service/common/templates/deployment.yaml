@@ -1,0 +1,26 @@
+---
+# Source: common/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  labels:
+    app: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          image: "harbor.local/banking-demo/notification-service:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          resources:
+            {}

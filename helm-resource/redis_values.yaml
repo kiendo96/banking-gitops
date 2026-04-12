@@ -1,0 +1,3 @@
+auth:
+  existingSecret: vault-redis-secret
+  existingSecretPasswordKey: redis-password
