@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/TBD/banking-gitops.git'
+    repoURL: 'https://github.com/kiendo96/banking-gitops.git'
     targetRevision: HEAD
     path: kustomize/overlays/dev
   destination:
