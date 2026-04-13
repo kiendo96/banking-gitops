@@ -14,6 +14,6 @@ spec:
     namespace: dev-infra
   syncPolicy:
     automated:
-      prune: true
+      prune: false
     syncOptions:
       - CreateNamespace=true
