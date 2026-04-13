@@ -2,7 +2,7 @@ postgresql:
   password: ""
   repmgrPassword: ""
   image:
-    tag: 17.2.0-debian-12-r6
+    tag: latest
   resources:
     limits:
       cpu: 375m
@@ -12,7 +12,7 @@ postgresql:
       memory: 256Mi
 pgpool:
   image:
-    tag: 4.5.5-debian-12-r3
+    tag: latest
 global:
   postgresql:
     auth:
