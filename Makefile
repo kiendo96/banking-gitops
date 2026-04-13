@@ -131,6 +131,7 @@ postgres: repo-add
 	@echo "🔧 Hydrating Postgres HA..."
 	@mkdir -p $(KUSTOMIZE_GEN_DIR)/postgres
 	helm template postgres bitnami/postgresql-ha \
+		--version 14.1.8 \
 		-n data \
 		-f $(HELM_RESOURCE_DIR)/postgres_values.yaml \
 		--output-dir $(KUSTOMIZE_GEN_DIR)/postgres
