@@ -10,7 +10,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.12"
+    "helm.sh/chart": "jenkins-5.9.13"
 spec:
   serviceName: jenkins
   replicas: 1
@@ -25,9 +25,9 @@ spec:
         "app.kubernetes.io/managed-by": "Helm"
         "app.kubernetes.io/instance": "jenkins"
         "app.kubernetes.io/component": "jenkins-controller"
-        "helm.sh/chart": "jenkins-5.9.12"
+        "helm.sh/chart": "jenkins-5.9.13"
       annotations:
-        checksum/config: d58529589702a22755bf6bf52717c77a78e3fa7603e2585c92e4be8bbff28fb8
+        checksum/config: 82a6d92f5c5aec8e0849c3ecba982f9791aa2d2e9bc8f02054f08ad0c7e2d8e5
     spec:
       enableServiceLinks: false
       securityContext:

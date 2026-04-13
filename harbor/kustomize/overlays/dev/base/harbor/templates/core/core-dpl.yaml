@@ -41,8 +41,8 @@ spec:
         app.kubernetes.io/component: core
       annotations:
         checksum/configmap: 1a00d29e05fcf7e69722e4c4edd9fea40e5054d02cd2441f4b2fb129a2c01b1f
-        checksum/secret: 5d297eb191272ae5f518dfbac72f0792698da4ced4a6e7b0e83c308ce358a94a
-        checksum/secret-jobservice: 78f77cbf9a847d7dc84f70887a9e9a7f72c00fdd049999eecdf1c0ae5acd1771
+        checksum/secret: d572623f05486a3114c5bdd598bee620ea4c5542b0ec407d83cf2bbdca18421d
+        checksum/secret-jobservice: 1b0c1dc6d4eccbfd975f1b2035e0b0b9d05a538bb69ac64a296d871cac42007e
     spec:
       securityContext:
         runAsUser: 10000

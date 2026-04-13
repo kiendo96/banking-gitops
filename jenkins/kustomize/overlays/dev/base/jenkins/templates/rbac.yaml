@@ -11,7 +11,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.12"
+    "helm.sh/chart": "jenkins-5.9.13"
 rules:
 - apiGroups: [""]
   resources: ["pods", "pods/exec", "pods/log", "persistentvolumeclaims", "events"]
@@ -33,7 +33,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.12"
+    "helm.sh/chart": "jenkins-5.9.13"
 rules:
 - apiGroups: [""]
   resources: ["configmaps"]
@@ -52,7 +52,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.12"
+    "helm.sh/chart": "jenkins-5.9.13"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -73,7 +73,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.12"
+    "helm.sh/chart": "jenkins-5.9.13"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

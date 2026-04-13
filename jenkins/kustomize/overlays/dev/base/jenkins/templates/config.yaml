@@ -11,7 +11,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.12"
+    "helm.sh/chart": "jenkins-5.9.13"
 data:
   apply_config.sh: |-
     set -e
