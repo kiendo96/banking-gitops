@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: postgres
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/version: 4.6.3
+    app.kubernetes.io/version: 4.5.5
     helm.sh/chart: postgresql-ha-16.3.2
     app.kubernetes.io/component: pgpool
 spec:
@@ -25,7 +25,7 @@ spec:
         app.kubernetes.io/instance: postgres
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: postgresql-ha
-        app.kubernetes.io/version: 4.6.3
+        app.kubernetes.io/version: 4.5.5
         helm.sh/chart: postgresql-ha-16.3.2
         app.kubernetes.io/component: pgpool
       annotations:
@@ -56,7 +56,7 @@ spec:
       # Auxiliary vars to populate environment variables
       containers:
         - name: pgpool
-          image: docker.io/bitnami/pgpool:4.6.3-debian-12-r0
+          image: docker.io/bitnami/pgpool:4.5.5-debian-12-r3
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false
