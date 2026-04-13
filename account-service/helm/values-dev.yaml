@@ -1,0 +1,30 @@
+replicaCount: 1
+image:
+  repository: harbor.local/banking-demo/account-service
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+configMap:
+  enabled: true
+extraEnv:
+  - name: REDIS_URL
+    value: "redis://redis.data.svc.cluster.local:6379/0"
+  - name: DATABASE_URL
+    value: "postgresql://postgres:postgres@postgres-postgresql-ha-pgpool.data.svc.cluster.local:5432/banking"
+
+# Secret tự động kéo từ Vault qua ESO
+secret:
+  enabled: true
+  vaultPath: "banking/account-service"
+  data:
+    - key: DB_PASSWORD
+      remoteProperty: database-password
+    - key: REDIS_PASSWORD
+      remoteProperty: redis-password

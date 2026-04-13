@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - common-app/templates/deployment.yaml
+  - common-app/templates/externalsecret.yaml
+  - common-app/templates/service.yaml
+  - notification-service/templates/deployment.yaml
+  - notification-service/templates/service.yaml

@@ -1,0 +1,31 @@
+---
+# Source: auth-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  labels:
+    app: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: "harbor.local/banking-demo/auth-service:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          env:
+            - name: REDIS_URL
+              value: "redis://redis.data.svc.cluster.local:6379/0"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@postgres-postgresql-ha-pgpool.data.svc.cluster.local:5432/banking"

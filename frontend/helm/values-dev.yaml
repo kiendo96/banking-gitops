@@ -1,0 +1,25 @@
+replicaCount: 1
+image:
+  repository: harbor.local/banking-demo/frontend
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+
+# Frontend cần Ingress để người dùng truy cập
+ingress:
+  enabled: true
+  host: banking.local
+  path: /
+
+# Cấu hình API URL cho frontend
+configMap:
+  enabled: true
+extraEnv:
+  - name: REACT_APP_API_URL
+    value: "http://banking.local/api"
+
+secret:
+  enabled: false

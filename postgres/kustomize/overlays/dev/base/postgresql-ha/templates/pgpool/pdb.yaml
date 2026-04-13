@@ -1,0 +1,21 @@
+---
+# Source: postgresql-ha/templates/pgpool/pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: postgres-postgresql-ha-pgpool
+  namespace: "data"
+  labels:
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    app.kubernetes.io/version: 16.6.0
+    helm.sh/chart: postgresql-ha-14.3.10
+    app.kubernetes.io/component: pgpool
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: postgres
+      app.kubernetes.io/name: postgresql-ha
+      app.kubernetes.io/component: pgpool

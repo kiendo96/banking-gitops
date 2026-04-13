@@ -1,0 +1,533 @@
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-3ifmv"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-3bpuo"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-bacn2"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-0tptm"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-1pfep"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-p58dg"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-xpdyr"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-9tnds"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-yozlu"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-u0x02"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-xq4md"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-yldob"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+---
+# Source: jenkins/templates/tests/jenkins-test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-ui-test-zeccx"
+  namespace: jenkins
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "docker.io/bats/bats:1.13.0"
+      command:
+        - "bash"
+        - "-c"
+      args:
+        - |
+          # copy bats to tools dir
+          set -ex
+          cp -R /opt/bats /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: jenkins-ui-test
+      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: jenkins-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never

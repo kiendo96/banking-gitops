@@ -1,0 +1,32 @@
+---
+# Source: common-app/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          image: "harbor.local/banking-demo/notification-service:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: notification-service-config
+            - secretRef:
+                name: notification-service-secret
+          env:
+            - name: REDIS_URL
+              value: "redis://redis.data.svc.cluster.local:6379/0"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@postgres-postgresql-ha-pgpool.data.svc.cluster.local:5432/banking"

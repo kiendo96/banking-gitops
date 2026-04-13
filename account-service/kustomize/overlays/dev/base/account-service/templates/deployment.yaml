@@ -1,0 +1,31 @@
+---
+# Source: account-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-service
+  labels:
+    app: account-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-service
+  template:
+    metadata:
+      labels:
+        app: account-service
+    spec:
+      containers:
+        - name: account-service
+          image: "harbor.local/banking-demo/account-service:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: REDIS_URL
+              value: "redis://redis.data.svc.cluster.local:6379/0"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@postgres-postgresql-ha-pgpool.data.svc.cluster.local:5432/banking"

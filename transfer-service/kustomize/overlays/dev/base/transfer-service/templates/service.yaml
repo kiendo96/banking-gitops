@@ -1,0 +1,17 @@
+---
+# Source: transfer-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: transfer-service
+  labels:
+    app: transfer-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8083
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: transfer-service
