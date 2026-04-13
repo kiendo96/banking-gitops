@@ -4,7 +4,7 @@ KUSTOMIZE_DIR := kustomize/overlays/$(ENV)
 OUTPUT_DIR := $(KUSTOMIZE_DIR)/base
 
 # Path tuyệt đối tới common chart
-CHART_REPO := $(realpath $(CURDIR)/../charts/common-app)
+CHART_REPO := $(realpath $(CURDIR)/../../charts/common-app)
 CHART_NAME := account-service
 NAMESPACE  := apps
 
