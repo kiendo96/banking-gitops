@@ -11,7 +11,7 @@ spec:
     path: banking-application-argocd/kustomize/overlays/dev
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: dev-infra
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true

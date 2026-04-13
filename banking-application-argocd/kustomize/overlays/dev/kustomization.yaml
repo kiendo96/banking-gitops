@@ -17,4 +17,4 @@ resources:
   - resources/applications/notification-service.yaml
   - resources/applications/transfer-service.yaml
 
-namespace: dev-infra
+namespace: argocd
