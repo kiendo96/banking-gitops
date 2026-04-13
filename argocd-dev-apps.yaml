@@ -1,19 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: frontend
+  name: banking-dev-apps
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/kiendo96/banking-gitops.git'
     targetRevision: main
-    path: frontend/kustomize/overlays/dev
+    path: banking-apps-argocd/kustomize/overlays/dev
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: apps
+    namespace: argocd
   syncPolicy:
     # automated:
     #   prune: true
+    #   selfHeal: true
     syncOptions:
       - CreateNamespace=true

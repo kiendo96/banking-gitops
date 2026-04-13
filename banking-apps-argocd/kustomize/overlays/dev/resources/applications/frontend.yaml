@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: transfer-service
+  name: frontend
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/kiendo96/banking-gitops.git'
     targetRevision: main
-    path: transfer-service/kustomize/overlays/dev
+    path: apps/frontend/kustomize/overlays/dev
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: apps

@@ -11,10 +11,5 @@ resources:
   - resources/applications/rabbitmq.yaml
   - resources/applications/kong.yaml
   - resources/applications/cluster-configs.yaml
-  - resources/applications/frontend.yaml
-  - resources/applications/account-service.yaml
-  - resources/applications/auth-service.yaml
-  - resources/applications/notification-service.yaml
-  - resources/applications/transfer-service.yaml
 
 namespace: argocd

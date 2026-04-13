@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: account-service
+  name: notification-service
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/kiendo96/banking-gitops.git'
     targetRevision: main
-    path: account-service/kustomize/overlays/dev
+    path: apps/notification-service/kustomize/overlays/dev
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: apps
   syncPolicy:
-    automated:
-      prune: false
+    # automated:
+    #   prune: true
     syncOptions:
       - CreateNamespace=true
