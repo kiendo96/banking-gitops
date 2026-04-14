@@ -13,7 +13,7 @@ spec:
     server: 'https://kubernetes.default.svc'
     namespace: kong
   syncPolicy:
-    # automated:
-    #   prune: true
+    automated:
+      prune: false
     syncOptions:
       - CreateNamespace=true
