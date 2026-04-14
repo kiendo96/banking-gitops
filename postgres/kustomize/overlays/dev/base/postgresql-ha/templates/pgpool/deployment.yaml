@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/instance: postgres
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/version: 4.5.4
-    helm.sh/chart: postgresql-ha-14.3.10
+    app.kubernetes.io/version: 4.6.3
+    helm.sh/chart: postgresql-ha-16.3.2
     app.kubernetes.io/component: pgpool
 spec:
   replicas: 1
@@ -25,9 +25,10 @@ spec:
         app.kubernetes.io/instance: postgres
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: postgresql-ha
-        app.kubernetes.io/version: 4.5.4
-        helm.sh/chart: postgresql-ha-14.3.10
+        app.kubernetes.io/version: 4.6.3
+        helm.sh/chart: postgresql-ha-16.3.2
         app.kubernetes.io/component: pgpool
+      annotations:
     spec:
       
       automountServiceAccountToken: false
@@ -55,7 +56,7 @@ spec:
       # Auxiliary vars to populate environment variables
       containers:
         - name: pgpool
-          image: docker.io/bitnami/pgpool:4.5.4-debian-12-r7
+          image: docker.io/bitnami/pgpool:4.6.3-debian-12-r0
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false
@@ -73,42 +74,41 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: "false"
-            - name: PGPOOL_BACKEND_NODES
-              value: 0:postgres-postgresql-ha-postgresql-0.postgres-postgresql-ha-postgresql-headless:5432,1:postgres-postgresql-ha-postgresql-1.postgres-postgresql-ha-postgresql-headless:5432,2:postgres-postgresql-ha-postgresql-2.postgres-postgresql-ha-postgresql-headless:5432,
-            - name: PGPOOL_SR_CHECK_USER
-              value: "repmgr"
-            - name: PGPOOL_SR_CHECK_PASSWORD
+            - name: REPMGR_NAMESPACE
               valueFrom:
-                secretKeyRef:
-                  name: postgres-postgresql-ha-postgresql
-                  key: repmgr-password
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: PGPOOL_BACKEND_NODES
+              value: 0:postgres-postgresql-ha-postgresql-0.postgres-postgresql-ha-postgresql-headless.$(REPMGR_NAMESPACE).svc.cluster.local:5432,1:postgres-postgresql-ha-postgresql-1.postgres-postgresql-ha-postgresql-headless.$(REPMGR_NAMESPACE).svc.cluster.local:5432,2:postgres-postgresql-ha-postgresql-2.postgres-postgresql-ha-postgresql-headless.$(REPMGR_NAMESPACE).svc.cluster.local:5432,
+            - name: PGPOOL_SR_CHECK_USER
+              value: "sr_check_user"
+            - name: PGPOOL_SR_CHECK_PASSWORD_FILE
+              value: "/opt/bitnami/pgpool/secrets/sr-check-password"
             - name: PGPOOL_SR_CHECK_DATABASE
               value: "postgres"
             - name: PGPOOL_ENABLE_LDAP
               value: "no"
             - name: PGPOOL_POSTGRES_USERNAME
               value: "postgres"
-            - name: PGPOOL_POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-postgresql-ha-postgresql
-                  key: password
+            - name: PGPOOL_POSTGRES_PASSWORD_FILE
+              value: "/opt/bitnami/pgpool/secrets/pgpool-password"
             - name: PGPOOL_ADMIN_USERNAME
               value: "admin"
-            - name: PGPOOL_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-postgresql-ha-pgpool
-                  key: admin-password
+            - name: PGPOOL_ADMIN_PASSWORD_FILE
+              value: "/opt/bitnami/pgpool/secrets/admin-password"
             - name: PGPOOL_AUTHENTICATION_METHOD
               value: "scram-sha-256"
             - name: PGPOOL_ENABLE_LOAD_BALANCING
+              value: "yes"
+            - name: PGPOOL_ENABLE_CONNECTION_CACHE
               value: "yes"
             - name: PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE
               value: "transaction"
             - name: PGPOOL_ENABLE_LOG_CONNECTIONS
               value: "no"
             - name: PGPOOL_ENABLE_LOG_HOSTNAME
+              value: "yes"
+            - name: PGPOOL_ENABLE_LOG_PCP_PROCESSES
               value: "yes"
             - name: PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT
               value: "no"
@@ -126,7 +126,7 @@ spec:
               containerPort: 5432
               protocol: TCP
           livenessProbe:
-            failureThreshold: 5
+            failureThreshold: 3
             initialDelaySeconds: 30
             periodSeconds: 10
             successThreshold: 1
@@ -144,7 +144,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - 'PGPASSWORD=$PGPOOL_POSTGRES_PASSWORD psql -U "postgres" -d "postgres" -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null'
+                - 'PGPASSWORD=$(< $PGPOOL_POSTGRES_PASSWORD_FILE) psql -U "postgres" -d "postgres" -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null'
           resources:
             limits:
               cpu: 375m
@@ -170,6 +170,24 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/pgpool/logs
               subPath: app-logs-dir
+            - name: postgresql-creds
+              subPath: pgpool-password
+              mountPath: /opt/bitnami/pgpool/secrets/pgpool-password
+            - name: pgpool-creds
+              subPath: admin-password
+              mountPath: /opt/bitnami/pgpool/secrets/admin-password
+            - name: pgpool-creds
+              subPath: sr-check-password
+              mountPath: /opt/bitnami/pgpool/secrets/sr-check-password
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: postgresql-creds
+          secret:
+            secretName: postgres-postgresql-ha-postgresql
+            items:
+              - key: password
+                path: pgpool-password
+        - name: pgpool-creds
+          secret:
+            secretName: postgres-postgresql-ha-pgpool

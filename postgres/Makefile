@@ -16,7 +16,7 @@ OUTPUT_DIR := $(KUSTOMIZE_DIR)/base
 CHART_REPO := bitnami/postgresql-ha
 CHART_NAME := postgres
 NAMESPACE  := data
-CHART_VERSION := 14.3.10
+CHART_VERSION := 16.3.2
 
 .PHONY: generate clean
 

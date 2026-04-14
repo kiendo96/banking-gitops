@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/instance: postgres
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/version: 16.6.0
-    helm.sh/chart: postgresql-ha-14.3.10
+    app.kubernetes.io/version: 17.6.0
+    helm.sh/chart: postgresql-ha-16.3.2
     app.kubernetes.io/component: pgpool
     role: data
 spec:

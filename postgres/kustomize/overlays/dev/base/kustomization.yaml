@@ -9,6 +9,7 @@ resources:
   - postgresql-ha/templates/postgresql/hooks-scripts-configmap.yaml
   - postgresql-ha/templates/postgresql/networkpolicy.yaml
   - postgresql-ha/templates/postgresql/pdb.yaml
+  - postgresql-ha/templates/postgresql/scripts-configmap.yaml
   - postgresql-ha/templates/postgresql/secrets.yaml
   - postgresql-ha/templates/postgresql/service-headless.yaml
   - postgresql-ha/templates/postgresql/service.yaml

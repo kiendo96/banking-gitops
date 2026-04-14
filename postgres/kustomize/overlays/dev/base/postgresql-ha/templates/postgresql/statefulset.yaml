@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/instance: postgres
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/version: 16.6.0
-    helm.sh/chart: postgresql-ha-14.3.10
+    app.kubernetes.io/version: 17.6.0
+    helm.sh/chart: postgresql-ha-16.3.2
     app.kubernetes.io/component: postgresql
     role: data
 spec:
@@ -31,10 +31,11 @@ spec:
         app.kubernetes.io/instance: postgres
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: postgresql-ha
-        app.kubernetes.io/version: 16.6.0
-        helm.sh/chart: postgresql-ha-14.3.10
+        app.kubernetes.io/version: 17.6.0
+        helm.sh/chart: postgresql-ha-16.3.2
         app.kubernetes.io/component: postgresql
         role: data
+      annotations:
     spec:
       
       automountServiceAccountToken: false
@@ -63,7 +64,7 @@ spec:
       hostIPC: false
       containers:
         - name: postgresql
-          image: docker.io/bitnami/postgresql-repmgr:16.6.0-debian-12-r0
+          image: docker.io/bitnami/postgresql-repmgr:17.6.0-debian-12-r2
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false
@@ -95,11 +96,8 @@ spec:
               value: "/bitnami/postgresql/data"
             - name: POSTGRES_USER
               value: "postgres"
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-postgresql-ha-postgresql
-                  key: password
+            - name: POSTGRES_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/password"
             - name: POSTGRES_DB
               value: "postgres"
             - name: POSTGRESQL_LOG_HOSTNAME
@@ -157,11 +155,12 @@ spec:
               value: "3"
             - name: REPMGR_USERNAME
               value: "repmgr"
-            - name: REPMGR_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-postgresql-ha-postgresql
-                  key: repmgr-password
+            - name: REPMGR_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/repmgr-password"
+            - name: REPMGR_USE_PASSFILE
+              value: "true"
+            - name: REPMGR_PASSFILE_PATH
+              value: /opt/bitnami/repmgr/conf/.pgpass
             - name: REPMGR_DATABASE
               value: "repmgr"
             - name: REPMGR_FENCE_OLD_PRIMARY
@@ -172,6 +171,14 @@ spec:
               value: "1"
             - name: REPMGR_CHILD_NODES_DISCONNECT_TIMEOUT
               value: "30"
+            - name: POSTGRESQL_SR_CHECK
+              value: "yes"
+            - name: POSTGRESQL_SR_CHECK_USERNAME
+              value: "sr_check_user"
+            - name: POSTGRESQL_SR_CHECK_DATABASE
+              value: "postgres"
+            - name: POSTGRESQL_SR_CHECK_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/sr-check-password"
           envFrom:
           ports:
             - name: postgresql
@@ -179,15 +186,13 @@ spec:
               protocol: TCP
           livenessProbe:
             failureThreshold: 6
-            initialDelaySeconds: 30
+            initialDelaySeconds: 15
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 5
             exec:
               command:
-                - bash
-                - -ec
-                - 'ps waux | grep "data standby clone" | grep -v grep || PGPASSWORD=$POSTGRES_PASSWORD psql -w -U "postgres" -d "postgres" -h 127.0.0.1 -p 5432 -c "SELECT 1"'
+                - /liveness-probe.sh
           readinessProbe:
             failureThreshold: 6
             initialDelaySeconds: 5
@@ -196,11 +201,7 @@ spec:
             timeoutSeconds: 5
             exec:
               command:
-                - bash
-                - -ec
-                - |
-                  exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
-                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+                - /readiness-probe.sh
           resources:
             limits:
               cpu: 375m
@@ -227,21 +228,39 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/repmgr/logs
               subPath: repmgr-logs-dir
+            - name: postgresql-creds
+              subPath: password
+              mountPath: /opt/bitnami/postgresql/secrets/password
+            - name: postgresql-creds
+              subPath: repmgr-password
+              mountPath: /opt/bitnami/postgresql/secrets/repmgr-password
+            - name: pgpool-creds
+              subPath: sr-check-password
+              mountPath: /opt/bitnami/postgresql/secrets/sr-check-password
             - name: data
               mountPath: /bitnami/postgresql
-            - name: hooks-scripts
+            - name: scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh
-            - name: hooks-scripts
+            - name: scripts
+              mountPath: /liveness-probe.sh
+              subPath: liveness-probe.sh
+            - name: scripts
               mountPath: /readiness-probe.sh
               subPath: readiness-probe.sh
       volumes:
         - name: empty-dir
           emptyDir: {}
-        - name: hooks-scripts
+        - name: scripts
           configMap:
-            name: postgres-postgresql-ha-postgresql-hooks-scripts
+            name: postgres-postgresql-ha-postgresql-scripts
             defaultMode: 0755
+        - name: postgresql-creds
+          secret:
+            secretName: postgres-postgresql-ha-postgresql
+        - name: pgpool-creds
+          secret:
+            secretName: postgres-postgresql-ha-pgpool
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
