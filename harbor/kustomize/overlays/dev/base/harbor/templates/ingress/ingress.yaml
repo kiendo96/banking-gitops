@@ -17,14 +17,11 @@ metadata:
     app.kubernetes.io/version: "2.14.3"
   annotations:
     ingress.kubernetes.io/proxy-body-size: "0"
-    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
-  tls:
-  - secretName: harbor-ingress
-    hosts:
-    - core.harbor.domain
+  ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -63,4 +60,4 @@ spec:
             name: harbor-portal
             port:
               number: 80
-    host: core.harbor.domain
+    host: harbor.local

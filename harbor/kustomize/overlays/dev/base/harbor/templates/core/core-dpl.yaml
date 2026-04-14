@@ -41,8 +41,8 @@ spec:
         app.kubernetes.io/component: core
       annotations:
         checksum/configmap: 1a00d29e05fcf7e69722e4c4edd9fea40e5054d02cd2441f4b2fb129a2c01b1f
-        checksum/secret: d572623f05486a3114c5bdd598bee620ea4c5542b0ec407d83cf2bbdca18421d
-        checksum/secret-jobservice: 1b0c1dc6d4eccbfd975f1b2035e0b0b9d05a538bb69ac64a296d871cac42007e
+        checksum/secret: a858ccb2f1ef0a3dbb0cf80d9081eda033bd4a168a40171785ca363d895a74b4
+        checksum/secret-jobservice: a1b106e588f179348f3dbe2636a82a0924701824e1704d8a737030b59e230311
     spec:
       securityContext:
         runAsUser: 10000
@@ -112,8 +112,6 @@ spec:
         - name: token-service-private-key
           mountPath: /etc/core/private_key.pem
           subPath: tls.key
-        - name: ca-download
-          mountPath: /etc/core/ca
         - name: psc
           mountPath: /etc/core/token
       volumes:
@@ -132,8 +130,5 @@ spec:
       - name: token-service-private-key
         secret:
           secretName: harbor-core
-      - name: ca-download
-        secret:
-          secretName: "harbor-ingress"
       - name: psc
         emptyDir: {}
