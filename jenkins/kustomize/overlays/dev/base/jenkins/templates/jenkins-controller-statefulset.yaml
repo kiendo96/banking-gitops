@@ -228,13 +228,6 @@ spec:
         projected:
           sources:
           - secret:
-              name: jenkins
-              items:
-                - key: jenkins-admin-user
-                  path: chart-admin-username
-                - key: jenkins-admin-password
-                  path: chart-admin-password
-          - secret:
               name: vault-jenkins-secret
       - name: jenkins-cache
         emptyDir: {}

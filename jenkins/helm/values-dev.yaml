@@ -1,5 +1,9 @@
 controller:
   existingSecret: vault-jenkins-secret
+  admin:
+    createSecret: false
+    userKey: jenkins-admin-user
+    passwordKey: jenkins-admin-password
   ingress:
     enabled: true
     ingressClassName: nginx

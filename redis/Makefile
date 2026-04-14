@@ -30,7 +30,8 @@ generate:
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "resources:" >> $(KUSTOMIZE_DIR)/kustomization.yaml
-	@echo "  - base" >> $(KUSTOMIZE_DIR)/kustomization.yaml
+	@echo "  - base
+	@if [ -f $(KUSTOMIZE_DIR)/externalsecret.yaml ]; then echo "  - externalsecret.yaml" >> $(KUSTOMIZE_DIR)/kustomization.yaml; fi" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "📝 Generating base/kustomization.yaml for $(ENV)..."
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(OUTPUT_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(OUTPUT_DIR)/kustomization.yaml
