@@ -9,7 +9,6 @@ resources:
   - jenkins/templates/jenkins-controller-statefulset.yaml
   - jenkins/templates/jenkins-controller-svc.yaml
   - jenkins/templates/rbac.yaml
-  - jenkins/templates/secret.yaml
   - jenkins/templates/service-account.yaml
   - jenkins/templates/tests/jenkins-test.yaml
   - jenkins/templates/tests/test-config.yaml
