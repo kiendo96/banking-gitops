@@ -1,8 +1,6 @@
 postgresql:
   password: ""
   repmgrPassword: ""
-  image:
-    tag: latest
   resources:
     limits:
       cpu: 375m
@@ -10,9 +8,6 @@ postgresql:
     requests:
       cpu: 250m
       memory: 256Mi
-pgpool:
-  image:
-    tag: latest
 global:
   postgresql:
     auth:
