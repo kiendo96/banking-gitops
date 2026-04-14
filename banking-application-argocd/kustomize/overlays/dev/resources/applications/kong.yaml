@@ -11,7 +11,7 @@ spec:
     path: kong/kustomize/overlays/dev
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: dev-infra
+    namespace: kong
   syncPolicy:
     # automated:
     #   prune: true
