@@ -17,8 +17,8 @@ def scrub_yaml(filepath):
             else:
                 skip_indent = -1  # back to sibling or higher level, stop skipping
                 
-        # Start skipping when we hit x-kubernetes-validations
-        if stripped.startswith('x-kubernetes-validations:'):
+        # Start skipping when we hit x-kubernetes-validations or selectableFields
+        if stripped.startswith('x-kubernetes-validations:') or stripped.startswith('selectableFields:'):
             skip_indent = indent
             continue
             
