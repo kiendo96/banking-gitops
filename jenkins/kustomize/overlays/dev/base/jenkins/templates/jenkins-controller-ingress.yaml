@@ -1,0 +1,27 @@
+---
+# Source: jenkins/templates/jenkins-controller-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: jenkins
+  labels:
+    "app.kubernetes.io/name": 'jenkins'
+    "app.kubernetes.io/managed-by": "Helm"
+    "app.kubernetes.io/instance": "jenkins"
+    "app.kubernetes.io/component": "jenkins-controller"
+    "helm.sh/chart": "jenkins-5.9.13"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: jenkins
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: jenkins
+            port:
+              number: 8080
+        pathType: ImplementationSpecific
+    host: "jenkins.local"

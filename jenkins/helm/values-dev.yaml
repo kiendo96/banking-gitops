@@ -1,2 +1,8 @@
 controller:
   existingSecret: vault-jenkins-secret
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostName: jenkins.local
+    annotations:
+      kubernetes.io/ingress.class: nginx

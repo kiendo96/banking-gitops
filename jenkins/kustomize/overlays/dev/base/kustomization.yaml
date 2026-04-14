@@ -5,6 +5,7 @@ resources:
   - jenkins/templates/home-pvc.yaml
   - jenkins/templates/jcasc-config.yaml
   - jenkins/templates/jenkins-agent-svc.yaml
+  - jenkins/templates/jenkins-controller-ingress.yaml
   - jenkins/templates/jenkins-controller-statefulset.yaml
   - jenkins/templates/jenkins-controller-svc.yaml
   - jenkins/templates/rbac.yaml
