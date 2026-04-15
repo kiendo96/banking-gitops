@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: harbor.local/banking-demo/auth-service
-  tag: "latest"
+  tag: "6"
   pullPolicy: Always
 
 service:
