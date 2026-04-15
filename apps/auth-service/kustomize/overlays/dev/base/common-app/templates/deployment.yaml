@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: auth-service
-          image: "harbor.local/banking-demo/auth-service:latest"
+          image: "harbor.local/banking-demo/auth-service:6"
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
