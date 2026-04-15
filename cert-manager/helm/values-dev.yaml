@@ -1,0 +1,12 @@
+# Helm values for cert-manager
+installCRDs: true
+replicaCount: 1
+
+prometheus:
+  enabled: false
+
+webhook:
+  replicaCount: 1
+
+cainjector:
+  replicaCount: 1
