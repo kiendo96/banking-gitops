@@ -30,8 +30,4 @@ generate: clean
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(OUTPUT_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(OUTPUT_DIR)/kustomization.yaml
 	@echo "resources:" >> $(OUTPUT_DIR)/kustomization.yaml
-	@if [ -d "$(OUTPUT_DIR)/$(CHART_NAME)/templates" ]; then \
-		echo "  - $(CHART_NAME)/templates" >> $(OUTPUT_DIR)/kustomization.yaml; \
-	elif [ -d "$(OUTPUT_DIR)/common-app/templates" ]; then \
-		echo "  - common-app/templates" >> $(OUTPUT_DIR)/kustomization.yaml; \
-	fi
+	@cd $(OUTPUT_DIR) && find . -type f -name "*.yaml" ! -name "kustomization.yaml" | sed 's|^./||' | sort | awk '{print "  - " $$0}' >> kustomization.yaml
