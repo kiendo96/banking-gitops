@@ -10,8 +10,12 @@ NAMESPACE  := apps
 
 .PHONY: generate clean
 
-generate:
-	@echo "🚀 Generating notification-service for environment: $(ENV)..."
+clean:
+	@echo "🧹 Cleaning $(OUTPUT_DIR)..."
+	@rm -rf $(OUTPUT_DIR)
+
+generate: clean
+	@echo "🚀 Generating $(CHART_NAME) for environment: $(ENV)..."
 	@mkdir -p $(OUTPUT_DIR)
 	helm template $(CHART_NAME) $(CHART_REPO) \
 		-n $(NAMESPACE) \
@@ -25,4 +29,4 @@ generate:
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(OUTPUT_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(OUTPUT_DIR)/kustomization.yaml
 	@echo "resources:" >> $(OUTPUT_DIR)/kustomization.yaml
-	@cd $(OUTPUT_DIR) && find . -name "*.yaml" ! -name "kustomization.yaml" | sed 's|^./|  - |' | sort >> kustomization.yaml
+	@cd $(OUTPUT_DIR) && find . -maxdepth 3 -name "*.yaml" ! -name "kustomization.yaml" | sed 's|^./||' | awk '{print "  - " $$0}' >> kustomization.yaml
