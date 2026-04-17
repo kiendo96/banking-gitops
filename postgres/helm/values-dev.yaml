@@ -9,6 +9,7 @@ postgresql:
       cpu: 250m
       memory: 256Mi
   auth:
+    database: "banking"
     existingSecret: vault-postgres-secret
     passwordKey: "password"
     repmgrPasswordKey: "repmgr-password"
