@@ -28,6 +28,8 @@ generate: clean
 		-n $(NAMESPACE) \
 		-f $(HELM_DIR)/values-$(ENV).yaml \
 		--output-dir $(OUTPUT_DIR)
+	@echo "🗑️  Removing Helm-generated secrets (managed by Vault/ExternalSecret)..."
+	@find $(OUTPUT_DIR) -name "secrets.yaml" -delete
 	@echo "📝 Generating base/kustomization.yaml for $(ENV)..."
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(OUTPUT_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(OUTPUT_DIR)/kustomization.yaml

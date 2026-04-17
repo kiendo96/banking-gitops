@@ -62,22 +62,11 @@ patches:
                   path: pgpool-password
           - name: pgpool-creds
             secret:
-              secretName: postgres-postgresql-ha-pgpool
-          - name: vault-creds
-            secret:
               secretName: vault-postgres-secret
               items:
+                - key: admin-password
+                  path: admin-password
                 - key: sr-check-password
                   path: sr-check-password
 
-  # --- Pgpool: volumeMount[7] sr-check-password → vault-creds ---
-  - target:
-      kind: Deployment
-      name: postgres-postgresql-ha-pgpool
-    patch: |-
-      - op: replace
-        path: /spec/template/spec/containers/0/volumeMounts/7
-        value:
-          name: vault-creds
-          subPath: sr-check-password
-          mountPath: /opt/bitnami/pgpool/secrets/sr-check-password
+
