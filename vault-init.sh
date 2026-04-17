@@ -6,7 +6,7 @@ echo "   Initialize and Unseal Vault HA (Production-ready mode)  "
 echo "==========================================================="
 
 echo "Waiting for vault-0 to be ready for initialization..."
-kubectl wait --for=condition=ready pod/vault-0 -n vault --timeout=60s || true
+kubectl wait --for=jsonpath='{.status.phase}'=Running pod/vault-0 -n vault --timeout=120s
 
 # Helper to execute commands in vault-0
 VAULT_POD=vault-0
@@ -38,11 +38,16 @@ UNSEAL_KEY_3=$(jq -r '.unseal_keys_b64[2]' cluster-keys.json)
 # Unseal all 3 pods
 for pod in vault-0 vault-1 vault-2; do
   echo "Checking status of $pod..."
-  # Wait for pod to be running before unsealing
   while [[ $(kubectl get pods $pod -n vault -o 'jsonpath={..status.phase}') != "Running" ]]; do
       echo "Waiting for $pod to be running..."
       sleep 3
   done
+
+  # If it's not vault-0, we must join the raft cluster BEFORE unsealing
+  if [ "$pod" != "vault-0" ]; then
+    echo "Joining $pod to raft cluster..."
+    kubectl exec -n vault $pod -- vault operator raft join http://vault-0.vault-internal:8200 || true
+  fi
 
   SEALED=$(kubectl exec -n vault $pod -- vault status -format=json 2>/dev/null | jq -r .sealed || echo "true")
   if [ "$SEALED" == "true" ]; then
@@ -59,11 +64,6 @@ done
 # Wait for leader election
 echo "Waiting for Raft leader election (10s)..."
 sleep 10
-
-# Join vault-1 and vault-2 to the raft cluster
-echo "Joining cluster nodes..."
-kubectl exec -n vault vault-1 -- vault operator raft join http://vault-0.vault-internal:8200 || true
-kubectl exec -n vault vault-2 -- vault operator raft join http://vault-0.vault-internal:8200 || true
 
 echo "Updating vault-token secret for External Secrets Operator..."
 kubectl delete secret vault-token -n vault --ignore-not-found
@@ -82,7 +82,7 @@ $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault
 
 echo "Configuring App secrets..."
 for app in auth-service account-service transfer-service notification-service; do
-  $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/banking/\$app database-password='super-secure-pg-password' redis-password='super-secure-redis-password'"
+  $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/banking/$app database-password='super-secure-pg-password' redis-password='super-secure-redis-password'"
 done
 
 echo "🚀 Vault Initialized and Unsealed! External Secrets Operator should pick these up shortly."
