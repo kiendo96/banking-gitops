@@ -27,6 +27,6 @@ spec:
                 name: notification-service-secret
           env:
             - name: REDIS_URL
-              value: "redis://redis.data.svc.cluster.local:6379/0"
+              value: "redis://:$(REDIS_PASSWORD)@redis-master.data.svc.cluster.local:6379/0"
             - name: DATABASE_URL
-              value: "postgresql://postgres:postgres@postgres-postgresql-ha-pgpool.data.svc.cluster.local:5432/banking"
+              value: "postgresql://postgres:$(DB_PASSWORD)@postgres-postgresql-ha-pgpool.data.svc.cluster.local:5432/banking"
