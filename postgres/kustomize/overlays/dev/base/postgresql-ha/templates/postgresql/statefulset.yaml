@@ -36,7 +36,7 @@ spec:
         app.kubernetes.io/component: postgresql
         role: data
       annotations:
-        checksum/configuration: 7b1ee97dfa4aadb2fedc0041b25c28828109e484c60b083a702a2d74feb9e2b2
+        checksum/configuration: 6fff24b13d3bfa0fafd1bbee56ff625e9a3ed10545bb94fa785c0539acfcdff1
     spec:
       
       automountServiceAccountToken: false
