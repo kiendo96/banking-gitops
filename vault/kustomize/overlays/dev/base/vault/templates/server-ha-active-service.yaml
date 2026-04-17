@@ -1,21 +1,19 @@
 ---
-# Source: vault/templates/server-service.yaml
-# Service for Vault cluster
+# Source: vault/templates/server-ha-active-service.yaml
+# Service for active Vault pod
 apiVersion: v1
 kind: Service
 metadata:
-  name: vault
+  name: vault-active
   namespace: vault
   labels:
     helm.sh/chart: vault-0.32.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
+    vault-active: "true"
   annotations:
-
 spec:
-  # We want the servers to become available even if they're not ready
-  # since this DNS is also used for join operations.
   publishNotReadyAddresses: true
   ports:
     - name: http
@@ -28,3 +26,4 @@ spec:
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     component: server
+    vault-active: "true"

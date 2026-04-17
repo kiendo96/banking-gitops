@@ -1,0 +1,25 @@
+---
+# Source: vault/templates/server-config-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-config
+  namespace: vault
+  labels:
+    helm.sh/chart: vault-0.32.0
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+data:
+  extraconfig-from-values.hcl: |-
+    ui = true
+    listener "tcp" {
+      tls_disable = 1
+      address = "[::]:8200"
+      cluster_address = "[::]:8201"
+    }
+    storage "raft" {
+      path = "/vault/data"
+    }
+    
+    disable_mlock = true

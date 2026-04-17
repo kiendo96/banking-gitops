@@ -13,7 +13,7 @@ metadata:
 spec:
   serviceName: vault-internal
   podManagementPolicy: Parallel
-  replicas: 1
+  replicas: 3
   updateStrategy:
     type: OnDelete
   selector:
@@ -31,6 +31,16 @@ spec:
       annotations:
     spec:
       
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: vault
+                  app.kubernetes.io/instance: "vault"
+                  component: server
+              topologyKey: kubernetes.io/hostname
+  
       
       
       
@@ -45,6 +55,10 @@ spec:
       hostNetwork: false
       volumes:
         
+        - name: config
+          configMap:
+            name: vault-config
+  
         - name: home
           emptyDir: {}
       containers:
@@ -57,8 +71,15 @@ spec:
           - "-ec"
           args: 
           - |
-            /usr/local/bin/docker-entrypoint.sh vault server -dev 
-  
+            cp /vault/config/extraconfig-from-values.hcl /tmp/storageconfig.hcl;
+            [ -n "${HOST_IP}" ] && sed -Ei "s|HOST_IP|${HOST_IP?}|g" /tmp/storageconfig.hcl;
+            [ -n "${POD_IP}" ] && sed -Ei "s|POD_IP|${POD_IP?}|g" /tmp/storageconfig.hcl;
+            [ -n "${HOSTNAME}" ] && sed -Ei "s|HOSTNAME|${HOSTNAME?}|g" /tmp/storageconfig.hcl;
+            [ -n "${API_ADDR}" ] && sed -Ei "s|API_ADDR|${API_ADDR?}|g" /tmp/storageconfig.hcl;
+            [ -n "${TRANSIT_ADDR}" ] && sed -Ei "s|TRANSIT_ADDR|${TRANSIT_ADDR?}|g" /tmp/storageconfig.hcl;
+            [ -n "${RAFT_ADDR}" ] && sed -Ei "s|RAFT_ADDR|${RAFT_ADDR?}|g" /tmp/storageconfig.hcl;
+            /usr/local/bin/docker-entrypoint.sh vault server -config=/tmp/storageconfig.hcl 
+   
           securityContext:
             allowPrivilegeEscalation: false
           env:
@@ -92,19 +113,26 @@ spec:
                   fieldPath: metadata.name
             - name: VAULT_CLUSTER_ADDR
               value: "https://$(HOSTNAME).vault-internal:8201"
+            - name: VAULT_RAFT_NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: HOME
               value: "/home/vault"
             
-            - name: VAULT_DEV_ROOT_TOKEN_ID
-              value: root
-            - name: VAULT_DEV_LISTEN_ADDRESS
-              value: "[::]:8200"
-  
             
             
           volumeMounts:
           
   
+    
+            - name: data
+              mountPath: /vault/data
+    
+  
+  
+            - name: config
+              mountPath: /vault/config
   
             - name: home
               mountPath: /home/vault
@@ -142,3 +170,18 @@ spec:
                 # chance to propagate, so requests will not be made
                 # to this pod while it's terminating
                 - "sleep 5 && kill -SIGTERM $(pidof vault)"
+      
+  
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      
+      
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
