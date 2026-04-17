@@ -31,6 +31,7 @@ generate: clean
 	@echo "kind: Kustomization" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "resources:" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "  - base" >> $(KUSTOMIZE_DIR)/kustomization.yaml
+	@if [ -f $(KUSTOMIZE_DIR)/vault-auto-unsealer.yaml ]; then echo "  - vault-auto-unsealer.yaml" >> $(KUSTOMIZE_DIR)/kustomization.yaml; fi
 	@echo "📝 Generating base/kustomization.yaml for $(ENV)..."
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(OUTPUT_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(OUTPUT_DIR)/kustomization.yaml

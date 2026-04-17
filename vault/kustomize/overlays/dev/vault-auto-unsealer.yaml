@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-auto-unsealer
+  namespace: vault
+  labels:
+    app: vault-auto-unsealer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-auto-unsealer
+  template:
+    metadata:
+      labels:
+        app: vault-auto-unsealer
+    spec:
+      containers:
+        - name: unsealer
+          image: alpine:3.18
+          command:
+            - /bin/sh
+            - -c
+            - |
+              apk add --no-cache curl jq >/dev/null 2>&1
+              echo "Starting Vault Auto-Unsealer..."
+              while true; do
+                for i in 0 1 2; do
+                  POD="vault-$i.vault-internal:8200"
+                  SEAL_STATUS=$(curl -s http://$POD/v1/sys/seal-status || echo '{"sealed":false}')
+                  SEALED=$(echo "$SEAL_STATUS" | jq -r .sealed 2>/dev/null || echo "false")
+                  
+                  if [ "$SEALED" = "true" ]; then
+                    echo "[$POD] is sealed. Unsealing..."
+                    curl -s --request PUT --data "{\"key\": \"$UNSEAL_KEY_1\"}" http://$POD/v1/sys/unseal >/dev/null
+                    curl -s --request PUT --data "{\"key\": \"$UNSEAL_KEY_2\"}" http://$POD/v1/sys/unseal >/dev/null
+                    curl -s --request PUT --data "{\"key\": \"$UNSEAL_KEY_3\"}" http://$POD/v1/sys/unseal >/dev/null
+                    echo "[$POD] unseal sequence sent."
+                  fi
+                done
+                sleep 20
+              done
+          envFrom:
+            - secretRef:
+                name: vault-unseal-keys
