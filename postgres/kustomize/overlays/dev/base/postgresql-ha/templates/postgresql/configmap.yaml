@@ -1,0 +1,20 @@
+---
+# Source: postgresql-ha/templates/postgresql/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-postgresql-ha-postgresql-configuration
+  namespace: "data"
+  labels:
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    app.kubernetes.io/version: 17.6.0
+    helm.sh/chart: postgresql-ha-16.3.2
+    app.kubernetes.io/component: postgresql
+data:
+  pg_hba.conf: |-
+    local   all             all                                     trust
+    host    all             all             127.0.0.1/32            scram-sha-256
+    host    all             all             0.0.0.0/0               scram-sha-256
+    host    replication     repmgr          0.0.0.0/0               scram-sha-256

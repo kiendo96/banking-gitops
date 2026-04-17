@@ -36,6 +36,7 @@ spec:
         app.kubernetes.io/component: postgresql
         role: data
       annotations:
+        checksum/configuration: 7b1ee97dfa4aadb2fedc0041b25c28828109e484c60b083a702a2d74feb9e2b2
     spec:
       
       automountServiceAccountToken: false
@@ -228,6 +229,8 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/repmgr/logs
               subPath: repmgr-logs-dir
+            - name: postgresql-config
+              mountPath: /bitnami/repmgr/conf
             - name: postgresql-creds
               subPath: password
               mountPath: /opt/bitnami/postgresql/secrets/password
@@ -255,6 +258,9 @@ spec:
           configMap:
             name: postgres-postgresql-ha-postgresql-scripts
             defaultMode: 0755
+        - name: postgresql-config
+          configMap:
+            name: postgres-postgresql-ha-postgresql-configuration
         - name: postgresql-creds
           secret:
             secretName: postgres-postgresql-ha-postgresql

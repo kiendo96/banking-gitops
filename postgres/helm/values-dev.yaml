@@ -1,6 +1,4 @@
 postgresql:
-  password: ""
-  repmgrPassword: ""
   image:
     registry: public.ecr.aws
   resources:
@@ -10,12 +8,28 @@ postgresql:
     requests:
       cpu: 250m
       memory: 256Mi
+  auth:
+    existingSecret: vault-postgres-secret
+    passwordKey: "password"
+    repmgrPasswordKey: "repmgr-password"
+  pgHbaConfiguration: |-
+    local   all             all                                     trust
+    host    all             all             127.0.0.1/32            scram-sha-256
+    host    all             all             0.0.0.0/0               scram-sha-256
+    host    replication     repmgr          0.0.0.0/0               scram-sha-256
+
 pgpool:
   image:
     registry: public.ecr.aws
+  auth:
+    existingSecret: vault-postgres-secret
+    passwordKey: "password"
+
 global:
   security:
     allowInsecureImages: true
   postgresql:
     auth:
       existingSecret: vault-postgres-secret
+      passwordKey: "password"
+      repmgrPasswordKey: "repmgr-password"

@@ -3,3 +3,81 @@ kind: Kustomization
 resources:
   - base
   - externalsecret.yaml
+
+# =============================================================================
+# Kustomize Patches
+# - Chuyển secret references từ hardcoded Helm Secret → vault-postgres-secret
+# - Helm chart bitnami/postgresql-ha luôn generate Secret riêng khi dùng
+#   `helm template`, dù đã set existingSecret. Patches này override đúng target.
+# =============================================================================
+patches:
+  # --- StatefulSet: volumes → vault-postgres-secret ---
+  - target:
+      kind: StatefulSet
+      name: postgres-postgresql-ha-postgresql
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/volumes
+        value:
+          - name: empty-dir
+            emptyDir: {}
+          - name: scripts
+            configMap:
+              name: postgres-postgresql-ha-postgresql-scripts
+              defaultMode: 0755
+          - name: postgresql-config
+            configMap:
+              name: postgres-postgresql-ha-postgresql-configuration
+          - name: postgresql-creds
+            secret:
+              secretName: vault-postgres-secret
+
+  # --- StatefulSet: volumeMount[9] sr-check-password → postgresql-creds ---
+  - target:
+      kind: StatefulSet
+      name: postgres-postgresql-ha-postgresql
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/volumeMounts/9
+        value:
+          name: postgresql-creds
+          subPath: sr-check-password
+          mountPath: /opt/bitnami/postgresql/secrets/sr-check-password
+
+  # --- Pgpool: volumes → vault-postgres-secret + vault-creds ---
+  - target:
+      kind: Deployment
+      name: postgres-postgresql-ha-pgpool
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/volumes
+        value:
+          - name: empty-dir
+            emptyDir: {}
+          - name: postgresql-creds
+            secret:
+              secretName: vault-postgres-secret
+              items:
+                - key: password
+                  path: pgpool-password
+          - name: pgpool-creds
+            secret:
+              secretName: postgres-postgresql-ha-pgpool
+          - name: vault-creds
+            secret:
+              secretName: vault-postgres-secret
+              items:
+                - key: sr-check-password
+                  path: sr-check-password
+
+  # --- Pgpool: volumeMount[7] sr-check-password → vault-creds ---
+  - target:
+      kind: Deployment
+      name: postgres-postgresql-ha-pgpool
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/volumeMounts/7
+        value:
+          name: vault-creds
+          subPath: sr-check-password
+          mountPath: /opt/bitnami/pgpool/secrets/sr-check-password

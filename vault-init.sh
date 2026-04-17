@@ -75,7 +75,7 @@ $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault
 
 # Populate secrets
 echo "Configuring Infrastructure secrets..."
-$VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/postgres password='super-secure-pg-password' repmgr-password='super-secure-repmgr-password'"
+$VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/postgres password='super-secure-pg-password' repmgr-password='super-secure-repmgr-password' sr-check-password='super-secure-sr-check-password'"
 $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/redis redis-password='super-secure-redis-password'"
 $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/rabbitmq rabbitmq-password='super-secure-rmq-password' rabbitmq-erlang-cookie='secure-erlang-cookie-xyz'"
 $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/jenkins jenkins-admin-password='admin' jenkins-admin-user='admin'"
