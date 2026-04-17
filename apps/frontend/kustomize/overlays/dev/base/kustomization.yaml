@@ -1,6 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - common-app/templates/configmap.yaml
   - common-app/templates/deployment.yaml
   - common-app/templates/ingress.yaml
   - common-app/templates/service.yaml
