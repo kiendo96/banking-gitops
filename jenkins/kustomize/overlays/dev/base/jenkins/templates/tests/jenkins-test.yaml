@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "jenkins-ui-test-c3auc"
+  name: "jenkins-ui-test-jm8vw"
   namespace: jenkins
   annotations:
     "helm.sh/hook": test-success
@@ -24,7 +24,7 @@ spec:
         name: tools
   containers:
     - name: jenkins-ui-test
-      image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+      image: "docker.io/jenkins/jenkins:2.555.1-jdk21"
       command: ["/tools/bats/bin/bats", "-t", "/tests/run.sh"]
       volumeMounts:
       - mountPath: /tests

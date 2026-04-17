@@ -9,7 +9,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.13"
+    "helm.sh/chart": "jenkins-5.9.18"
   annotations:
     kubernetes.io/ingress.class: nginx
   name: jenkins

@@ -16,12 +16,17 @@ metadata:
     app.kubernetes.io/part-of: harbor
     app.kubernetes.io/version: "2.14.3"
   annotations:
+    cert-manager.io/cluster-issuer: harbor-issuer
     ingress.kubernetes.io/proxy-body-size: "0"
-    ingress.kubernetes.io/ssl-redirect: "false"
+    ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
+  tls:
+  - secretName: harbor-ingress
+    hosts:
+    - harbor.local
   rules:
   - http:
       paths:

@@ -10,7 +10,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.13"
+    "helm.sh/chart": "jenkins-5.9.18"
     jenkins-jenkins-config: "true"
 data:
   jcasc-default-config.yaml: |-
@@ -57,7 +57,7 @@ data:
           templates:
             - name: "default"
               namespace: "jenkins"
-              id: f4d4365a0fec0782b890b993b76313dc849cf66ca57c3fdedba41bcdef3b7069
+              id: bad56ce76c3a0312a1969d7702f884e938a2ac146244a2fdb558e233960e33e2
               containers:
               - name: "jnlp"
                 alwaysPullImage: false
@@ -66,7 +66,7 @@ data:
                   - envVar:
                       key: "JENKINS_URL"
                       value: "http://jenkins.jenkins.svc.cluster.local:8080/"
-                image: "jenkins/inbound-agent:3355.v388858a_47b_33-17"
+                image: "jenkins/inbound-agent:3355.v388858a_47b_33-19"
                 privileged: "false"
                 resourceLimitCpu: 512m
                 resourceLimitMemory: 512Mi
@@ -85,9 +85,6 @@ data:
               yamlMergeStrategy: override
               inheritYamlMergeStrategy: false
       slaveAgentPort: 50000
-      crumbIssuer:
-        standard:
-          excludeClientIPFromCrumb: true
     security:
       apiToken:
         creationOfLegacyTokenEnabled: false

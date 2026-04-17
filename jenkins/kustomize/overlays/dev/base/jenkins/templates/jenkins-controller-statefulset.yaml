@@ -10,7 +10,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.13"
+    "helm.sh/chart": "jenkins-5.9.18"
 spec:
   serviceName: jenkins
   replicas: 1
@@ -25,9 +25,9 @@ spec:
         "app.kubernetes.io/managed-by": "Helm"
         "app.kubernetes.io/instance": "jenkins"
         "app.kubernetes.io/component": "jenkins-controller"
-        "helm.sh/chart": "jenkins-5.9.13"
+        "helm.sh/chart": "jenkins-5.9.18"
       annotations:
-        checksum/config: 82a6d92f5c5aec8e0849c3ecba982f9791aa2d2e9bc8f02054f08ad0c7e2d8e5
+        checksum/config: 2bca45cbdf557bc46b6f17c393b71b74d3d7f1daf416390eec45890a4293d964
     spec:
       enableServiceLinks: false
       securityContext:
@@ -40,7 +40,7 @@ spec:
       automountServiceAccountToken: true
       initContainers:
         - name: config-reload-init
-          image: "docker.io/kiwigrid/k8s-sidecar:2.5.0"
+          image: "docker.io/kiwigrid/k8s-sidecar:2.6.0"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -72,7 +72,7 @@ spec:
               mountPath: /tmp
 
         - name: "init"
-          image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+          image: "docker.io/jenkins/jenkins:2.555.1-jdk21"
           imagePullPolicy: "Always"
           securityContext:
             allowPrivilegeEscalation: false
@@ -100,7 +100,7 @@ spec:
               name: tmp-volume
       containers:
         - name: jenkins
-          image: "docker.io/jenkins/jenkins:2.541.3-jdk21"
+          image: "docker.io/jenkins/jenkins:2.555.1-jdk21"
           imagePullPolicy: "Always"
           securityContext:
             allowPrivilegeEscalation: false
@@ -181,7 +181,7 @@ spec:
             - mountPath: /tmp
               name: tmp-volume
         - name: config-reload
-          image: "docker.io/kiwigrid/k8s-sidecar:2.5.0"
+          image: "docker.io/kiwigrid/k8s-sidecar:2.6.0"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false

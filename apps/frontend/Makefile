@@ -23,7 +23,6 @@ generate: clean
 		--output-dir $(OUTPUT_DIR)
 	@echo "📝 Building kustomization.yaml..."
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(KUSTOMIZE_DIR)/kustomization.yaml
-	@echo "kind: Kustomization" >> $(Kustomization.yaml" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "resources:" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@echo "  - base" >> $(KUSTOMIZE_DIR)/kustomization.yaml

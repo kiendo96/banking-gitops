@@ -19,7 +19,7 @@ NAMESPACE  := harbor
 
 .PHONY: generate clean
 
-generate:
+generate: clean
 	@echo "🔧 Hydrating $(CHART_NAME) for environment: $(ENV)..."
 	@mkdir -p $(OUTPUT_DIR)
 	helm template $(CHART_NAME) $(CHART_REPO) \

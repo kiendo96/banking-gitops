@@ -4,5 +4,3 @@ resources:
   - common-app/templates/deployment.yaml
   - common-app/templates/externalsecret.yaml
   - common-app/templates/service.yaml
-  - transfer-service/templates/deployment.yaml
-  - transfer-service/templates/service.yaml

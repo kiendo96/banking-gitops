@@ -11,7 +11,7 @@ metadata:
     "app.kubernetes.io/managed-by": "Helm"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-controller"
-    "helm.sh/chart": "jenkins-5.9.13"
+    "helm.sh/chart": "jenkins-5.9.18"
 data:
   apply_config.sh: |-
     set -e
@@ -37,4 +37,4 @@ data:
     kubernetes:4423.vb_59f230b_ce53
     workflow-aggregator:608.v67378e9d3db_1
     git:5.10.1
-    configuration-as-code:2061.vc08919f7fc37
+    configuration-as-code:2074.va_57f83f7a_10b_

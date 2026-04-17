@@ -5,7 +5,7 @@
 SHELL := /bin/bash
 
 INFRA_COMPONENTS := vault external-secrets jenkins harbor postgres redis rabbitmq kong
-APP_COMPONENTS   := frontend account-service auth-service notification-service transfer-service
+APP_COMPONENTS   := apps/frontend apps/account-service apps/auth-service apps/notification-service apps/transfer-service
 ALL_COMPONENTS   := $(INFRA_COMPONENTS) $(APP_COMPONENTS)
 
 # Default environment
