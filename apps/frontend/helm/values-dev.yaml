@@ -6,7 +6,7 @@ image:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 # Frontend cần Ingress để người dùng truy cập
 ingress:

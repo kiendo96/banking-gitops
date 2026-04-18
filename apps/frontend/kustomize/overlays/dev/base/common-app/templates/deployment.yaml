@@ -19,7 +19,7 @@ spec:
           image: "harbor.local/banking-demo/frontend:3"
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           envFrom:
             - configMapRef:
                 name: frontend-config
