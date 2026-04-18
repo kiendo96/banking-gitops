@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: harbor.local/banking-demo/frontend
-  tag: "2"
+  tag: "3"
   pullPolicy: Always
 
 service:
