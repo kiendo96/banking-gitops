@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: "harbor.local/banking-demo/frontend:latest"
+          image: "harbor.local/banking-demo/frontend:2"
           imagePullPolicy: Always
           ports:
             - containerPort: 80
