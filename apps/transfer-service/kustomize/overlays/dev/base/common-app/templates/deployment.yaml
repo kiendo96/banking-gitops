@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: transfer-service
-          image: "harbor.local/banking-demo/transfer-service:latest"
+          image: "harbor.local/banking-demo/transfer-service:1"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
