@@ -1,0 +1,20 @@
+---
+# Source: common-app/templates/httproute.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: transfer-service
+spec:
+  parentRefs:
+  - name: banking-gateway
+    namespace: kong
+  hostnames:
+  - "banking.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api/transfer
+    backendRefs:
+    - name: transfer-service
+      port: 8080

@@ -11,6 +11,11 @@ service:
 ingress:
   enabled: false
 
+httpRoute:
+  enabled: true
+  host: banking.local
+  path: /api/transfer
+
 configMap:
   enabled: true
 extraEnv:

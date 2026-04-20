@@ -1,0 +1,20 @@
+{{- if .Values.httpRoute.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  parentRefs:
+  - name: {{ .Values.httpRoute.gatewayName | default "banking-gateway" }}
+    namespace: {{ .Values.httpRoute.gatewayNamespace | default "kong" }}
+  hostnames:
+  - {{ .Values.httpRoute.host | quote }}
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: {{ .Values.httpRoute.path | default "/" }}
+    backendRefs:
+    - name: {{ .Release.Name }}
+      port: {{ .Values.service.port }}
+{{- end }}
