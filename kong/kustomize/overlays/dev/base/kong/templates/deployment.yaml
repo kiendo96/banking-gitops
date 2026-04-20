@@ -170,6 +170,8 @@ spec:
           value: "0.0.0.0:8080"
         - name: CONTROLLER_ELECTION_ID
           value: "kong-ingress-controller-leader-kong"
+        - name: CONTROLLER_FEATURE_GATES
+          value: "GatewayAlpha=true"
         - name: CONTROLLER_INGRESS_CLASS
           value: "kong"
         - name: CONTROLLER_KONG_ADMIN_TLS_SKIP_VERIFY

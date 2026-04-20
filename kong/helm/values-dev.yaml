@@ -2,6 +2,8 @@ ingressController:
   enabled: true
   gatewayAPI:
     enabled: true
+  env:
+    feature_gates: "GatewayAlpha=true"
 
 env:
   router_flavor: expressions
