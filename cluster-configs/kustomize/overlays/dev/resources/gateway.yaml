@@ -1,4 +1,4 @@
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1beta1
 kind: GatewayClass
 metadata:
   name: kong
@@ -7,7 +7,7 @@ metadata:
 spec:
   controllerName: konghq.com/gateway-controller
 ---
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1beta1
 kind: Gateway
 metadata:
   name: banking-gateway
