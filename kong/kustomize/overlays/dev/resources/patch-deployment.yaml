@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-kong
+  namespace: kong
+spec:
+  template:
+    spec:
+      containers:
+      - name: ingress-controller
+        env:
+        - name: CONTROLLER_FEATURE_GATES
+          value: "GatewayAlpha=true"
+        - name: CONTROLLER_GATEWAY_API_CONTROLLER_NAME
+          value: "konghq.com/gateway-controller"
