@@ -1,9 +1,9 @@
 ---
-# Source: harbor/templates/jobservice/jobservice-secrets.yaml
+# Source: harbor/templates/nginx/service.yaml
 apiVersion: v1
-kind: Secret
+kind: Service
 metadata:
-  name: "harbor-jobservice"
+  name: harbor
   namespace: "harbor"
   labels:
     heritage: Helm
@@ -15,7 +15,13 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
     app.kubernetes.io/version: "2.14.3"
-type: Opaque
-data:
-  JOBSERVICE_SECRET: "RUIzMHZXU2E5cXVvSjJDcw=="
-  REGISTRY_CREDENTIAL_PASSWORD: "aGFyYm9yX3JlZ2lzdHJ5X3Bhc3N3b3Jk"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    release: harbor
+    app: "harbor"
+    component: nginx

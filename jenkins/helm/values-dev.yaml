@@ -5,8 +5,4 @@ controller:
     userKey: jenkins-admin-user
     passwordKey: jenkins-admin-password
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    hostName: jenkins.local
-    annotations:
-      kubernetes.io/ingress.class: nginx
+    enabled: false

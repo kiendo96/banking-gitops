@@ -92,4 +92,4 @@ data:
         usageStatisticsEnabled: true
     unclassified:
       location:
-        url: http://jenkins.local
+        url: http://jenkins:8080

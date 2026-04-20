@@ -1,9 +1,9 @@
 ---
-# Source: harbor/templates/jobservice/jobservice-dpl.yaml
+# Source: harbor/templates/nginx/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "harbor-jobservice"
+  name: harbor-nginx
   namespace: "harbor"
   labels:
     heritage: Helm
@@ -15,18 +15,16 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
     app.kubernetes.io/version: "2.14.3"
-    component: jobservice
-    app.kubernetes.io/component: jobservice
+    component: nginx
+    app.kubernetes.io/component: nginx
 spec:
   replicas: 1
   revisionHistoryLimit: 10
-  strategy:
-    type: RollingUpdate
   selector:
     matchLabels:
       release: harbor
       app: "harbor"
-      component: jobservice
+      component: nginx
   template:
     metadata:
       labels:
@@ -39,43 +37,33 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
         app.kubernetes.io/version: "2.14.3"
-        component: jobservice
-        app.kubernetes.io/component: jobservice
+        component: nginx
+        app.kubernetes.io/component: nginx
       annotations:
-        checksum/configmap: f337f0cc8009911a8e897e975c6c2c1d47496b292496174d35b41e2aa14cc46d
-        checksum/configmap-env: add737773f58943f66eff6298294138c2eac8a2b9081a64136215a9eafc2a11a
-        checksum/secret: 372e5da31fe51908f6c6331229cdd81be83e9af24dbe8c9856e1e6908251ae76
-        checksum/secret-core: 4b7a3c95aea1eab45e94380e373337dc471a0511cc051a1f7c7d719ba131d70f
+        checksum/configmap: d5caf2958d0ae812c8a72894626018a716113b2f2496b8607333e796f5741ba2
     spec:
       securityContext:
         runAsUser: 10000
         fsGroup: 10000
       automountServiceAccountToken: false
-      terminationGracePeriodSeconds: 120
       containers:
-      - name: jobservice
-        image: goharbor/harbor-jobservice:v2.14.3
-        imagePullPolicy: IfNotPresent
+      - name: nginx
+        image: "goharbor/nginx-photon:v2.14.3"
+        imagePullPolicy: "IfNotPresent"
         livenessProbe:
           httpGet:
-            path: /api/v1/stats
             scheme: HTTP
+            path: /
             port: 8080
           initialDelaySeconds: 300
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /api/v1/stats
             scheme: HTTP
+            path: /
             port: 8080
-          initialDelaySeconds: 20
+          initialDelaySeconds: 1
           periodSeconds: 10
-        env:
-          - name: CORE_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: harbor-core
-                key: secret
         securityContext: 
           allowPrivilegeEscalation: false
           capabilities:
@@ -85,24 +73,13 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-        envFrom:
-        - configMapRef:
-            name: "harbor-jobservice-env"
-        - secretRef:
-            name: "harbor-jobservice"
         ports:
         - containerPort: 8080
         volumeMounts:
-        - name: jobservice-config
-          mountPath: /etc/jobservice/config.yml
-          subPath: config.yml
-        - name: job-logs
-          mountPath: /var/log/jobs
-          subPath: 
+        - name: config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
       volumes:
-      - name: jobservice-config
+      - name: config
         configMap:
-          name: "harbor-jobservice"
-      - name: job-logs
-        persistentVolumeClaim:
-          claimName: harbor-jobservice
+          name: harbor-nginx

@@ -8,14 +8,15 @@ resources:
   - harbor/templates/database/database-secret.yaml
   - harbor/templates/database/database-ss.yaml
   - harbor/templates/database/database-svc.yaml
-  - harbor/templates/ingress/ingress.yaml
-  - harbor/templates/ingress/secret.yaml
   - harbor/templates/jobservice/jobservice-cm-env.yaml
   - harbor/templates/jobservice/jobservice-cm.yaml
   - harbor/templates/jobservice/jobservice-dpl.yaml
   - harbor/templates/jobservice/jobservice-pvc.yaml
   - harbor/templates/jobservice/jobservice-secrets.yaml
   - harbor/templates/jobservice/jobservice-svc.yaml
+  - harbor/templates/nginx/configmap-http.yaml
+  - harbor/templates/nginx/deployment.yaml
+  - harbor/templates/nginx/service.yaml
   - harbor/templates/portal/configmap.yaml
   - harbor/templates/portal/deployment.yaml
   - harbor/templates/portal/service.yaml

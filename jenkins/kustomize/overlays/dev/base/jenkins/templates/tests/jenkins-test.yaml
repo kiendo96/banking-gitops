@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "jenkins-ui-test-vea4c"
+  name: "jenkins-ui-test-qigx4"
   namespace: jenkins
   annotations:
     "helm.sh/hook": test-success
