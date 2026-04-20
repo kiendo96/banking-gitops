@@ -108,7 +108,7 @@ spec:
         - name: KONG_PROXY_STREAM_ERROR_LOG
           value: "/dev/stderr"
         - name: KONG_ROUTER_FLAVOR
-          value: "traditional"
+          value: "expressions"
         - name: KONG_STATUS_ACCESS_LOG
           value: "off"
         - name: KONG_STATUS_ERROR_LOG
@@ -272,7 +272,7 @@ spec:
         - name: KONG_PROXY_STREAM_ERROR_LOG
           value: "/dev/stderr"
         - name: KONG_ROUTER_FLAVOR
-          value: "traditional"
+          value: "expressions"
         - name: KONG_STATUS_ACCESS_LOG
           value: "off"
         - name: KONG_STATUS_ERROR_LOG

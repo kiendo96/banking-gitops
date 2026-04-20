@@ -3,6 +3,8 @@ ingressController:
   gatewayAPI:
     enabled: true
 
+env:
+  router_flavor: expressions
+
 proxy:
   type: LoadBalancer
-  # MetalLB sẽ tự động gán IP từ Address Pool mặc định
