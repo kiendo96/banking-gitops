@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - cluster-secret-store.yaml
   - resources/cluster-issuer.yaml
+  - resources/gateway-certificate.yaml
   - resources/gateway.yaml

@@ -8,17 +8,30 @@ metadata:
 spec:
   controllerName: konghq.com/kic-gateway-controller
 ---
-apiVersion: gateway.networking.k8s.io/v1beta1
+apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: banking-gateway
   namespace: kong
+  annotations:
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"
 spec:
   gatewayClassName: kong
   listeners:
   - name: http
     port: 80
     protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: banking-gateway-tls
+        namespace: kong
     allowedRoutes:
       namespaces:
         from: All

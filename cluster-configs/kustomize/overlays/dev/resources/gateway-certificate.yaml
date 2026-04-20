@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: banking-gateway-tls
+  namespace: kong
+spec:
+  secretName: banking-gateway-tls
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+  commonName: "*.local"
+  dnsNames:
+    - "harbor.local"
+    - "jenkins.local"
+    - "banking.local"
+    - "argocd.local"
