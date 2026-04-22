@@ -4,3 +4,6 @@ resources:
   - base
   - externalsecret.yaml
   - resources/jenkins-route.yaml
+
+patches:
+  - path: resources-patch.yaml
