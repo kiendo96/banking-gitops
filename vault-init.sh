@@ -35,19 +35,13 @@ UNSEAL_KEY_1=$(jq -r '.unseal_keys_b64[0]' cluster-keys.json)
 UNSEAL_KEY_2=$(jq -r '.unseal_keys_b64[1]' cluster-keys.json)
 UNSEAL_KEY_3=$(jq -r '.unseal_keys_b64[2]' cluster-keys.json)
 
-# Unseal all 3 pods
-for pod in vault-0 vault-1 vault-2; do
+# Unseal vault-0
+for pod in vault-0; do
   echo "Checking status of $pod..."
   while [[ $(kubectl get pods $pod -n vault -o 'jsonpath={..status.phase}') != "Running" ]]; do
       echo "Waiting for $pod to be running..."
       sleep 3
   done
-
-  # If it's not vault-0, we must join the raft cluster BEFORE unsealing
-  if [ "$pod" != "vault-0" ]; then
-    echo "Joining $pod to raft cluster..."
-    kubectl exec -n vault $pod -- vault operator raft join http://vault-0.vault-internal:8200 || true
-  fi
 
   SEALED=$(kubectl exec -n vault $pod -- vault status -format=json 2>/dev/null | jq -r .sealed || echo "true")
   if [ "$SEALED" == "true" ]; then
@@ -61,9 +55,9 @@ for pod in vault-0 vault-1 vault-2; do
   fi
 done
 
-# Wait for leader election
-echo "Waiting for Raft leader election (10s)..."
-sleep 10
+# Wait for Vault to be fully ready
+echo "Waiting for Vault to be ready (5s)..."
+sleep 5
 
 echo "Updating vault-token secret for External Secrets Operator..."
 kubectl delete secret vault-token -n vault --ignore-not-found

@@ -25,7 +25,7 @@ spec:
               apk add --no-cache curl jq >/dev/null 2>&1
               echo "Starting Vault Auto-Unsealer..."
               while true; do
-                for i in 0 1 2; do
+                for i in 0; do
                   POD="vault-$i.vault-internal:8200"
                   SEAL_STATUS=$(curl -s http://$POD/v1/sys/seal-status || echo '{"sealed":false}')
                   SEALED=$(echo "$SEAL_STATUS" | jq -r .sealed 2>/dev/null || echo "false")
