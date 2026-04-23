@@ -35,6 +35,14 @@ UNSEAL_KEY_1=$(jq -r '.unseal_keys_b64[0]' cluster-keys.json)
 UNSEAL_KEY_2=$(jq -r '.unseal_keys_b64[1]' cluster-keys.json)
 UNSEAL_KEY_3=$(jq -r '.unseal_keys_b64[2]' cluster-keys.json)
 
+# Create secret for vault-auto-unsealer
+echo "Updating vault-unseal-keys secret for auto-unsealer..."
+kubectl delete secret vault-unseal-keys -n vault --ignore-not-found
+kubectl create secret generic vault-unseal-keys -n vault \
+  --from-literal=UNSEAL_KEY_1=$UNSEAL_KEY_1 \
+  --from-literal=UNSEAL_KEY_2=$UNSEAL_KEY_2 \
+  --from-literal=UNSEAL_KEY_3=$UNSEAL_KEY_3
+
 # Unseal vault-0
 for pod in vault-0; do
   echo "Checking status of $pod..."
