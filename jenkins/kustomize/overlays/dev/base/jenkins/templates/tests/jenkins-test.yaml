@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "jenkins-ui-test-pys17"
+  name: "jenkins-ui-test-s0kiz"
   namespace: jenkins
   annotations:
     "helm.sh/hook": test-success
