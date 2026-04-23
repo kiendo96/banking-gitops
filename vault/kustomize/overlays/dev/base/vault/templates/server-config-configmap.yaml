@@ -18,7 +18,7 @@ data:
       address = "[::]:8200"
       cluster_address = "[::]:8201"
     }
-    storage "raft" {
+    storage "file" {
       path = "/vault/data"
     }
     
