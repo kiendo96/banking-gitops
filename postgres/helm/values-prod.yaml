@@ -1,0 +1,32 @@
+image:
+  registry: public.ecr.aws
+
+architecture: standalone
+
+auth:
+  database: "banking"
+  existingSecret: vault-postgres-secret
+  secretKeys:
+    adminPasswordKey: "password"
+    userPasswordKey: "password"
+
+primary:
+  resources:
+    limits:
+      cpu: 375m
+      memory: 384Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  pgHbaConfiguration: |-
+    local   all             all                                     trust
+    host    all             all             127.0.0.1/32            trust
+    host    all             all             0.0.0.0/0               scram-sha-256
+
+global:
+  postgresql:
+    auth:
+      existingSecret: vault-postgres-secret
+      secretKeys:
+        adminPasswordKey: "password"
+        userPasswordKey: "password"

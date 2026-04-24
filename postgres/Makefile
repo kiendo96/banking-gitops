@@ -13,10 +13,10 @@ KUSTOMIZE_DIR := kustomize/overlays/$(ENV)
 OUTPUT_DIR := $(KUSTOMIZE_DIR)/base
 
 # Component specific config (can be overwritten per service)
-CHART_REPO := bitnami/postgresql-ha
+CHART_REPO := bitnami/postgresql
 CHART_NAME := postgres
 NAMESPACE  := data
-CHART_VERSION := 16.3.2
+CHART_VERSION := 15.5.38
 
 .PHONY: generate clean
 

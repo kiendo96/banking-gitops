@@ -1,6 +1,16 @@
-postgresql:
-  image:
-    registry: public.ecr.aws
+image:
+  registry: public.ecr.aws
+
+architecture: standalone
+
+auth:
+  database: "banking"
+  existingSecret: vault-postgres-secret
+  secretKeys:
+    adminPasswordKey: "password"
+    userPasswordKey: "password"
+
+primary:
   resources:
     limits:
       cpu: 375m
@@ -8,29 +18,15 @@ postgresql:
     requests:
       cpu: 250m
       memory: 256Mi
-  auth:
-    database: "banking"
-    existingSecret: vault-postgres-secret
-    passwordKey: "password"
-    repmgrPasswordKey: "repmgr-password"
   pgHbaConfiguration: |-
     local   all             all                                     trust
     host    all             all             127.0.0.1/32            trust
     host    all             all             0.0.0.0/0               scram-sha-256
-    host    replication     repmgr          0.0.0.0/0               scram-sha-256
-
-pgpool:
-  image:
-    registry: public.ecr.aws
-  auth:
-    existingSecret: vault-postgres-secret
-    passwordKey: "password"
 
 global:
-  security:
-    allowInsecureImages: true
   postgresql:
     auth:
       existingSecret: vault-postgres-secret
-      passwordKey: "password"
-      repmgrPasswordKey: "repmgr-password"
+      secretKeys:
+        adminPasswordKey: "password"
+        userPasswordKey: "password"

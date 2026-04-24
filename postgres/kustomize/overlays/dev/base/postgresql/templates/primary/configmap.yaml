@@ -1,20 +1,19 @@
 ---
-# Source: postgresql-ha/templates/postgresql/configmap.yaml
+# Source: postgresql/templates/primary/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-postgresql-ha-postgresql-configuration
+  name: postgres-postgresql-configuration
   namespace: "data"
   labels:
     app.kubernetes.io/instance: postgres
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/version: 17.6.0
-    helm.sh/chart: postgresql-ha-16.3.2
-    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.4.0
+    helm.sh/chart: postgresql-15.5.38
+    app.kubernetes.io/component: primary
 data:
-  pg_hba.conf: |-
+  pg_hba.conf: |
     local   all             all                                     trust
     host    all             all             127.0.0.1/32            trust
     host    all             all             0.0.0.0/0               scram-sha-256
-    host    replication     repmgr          0.0.0.0/0               scram-sha-256

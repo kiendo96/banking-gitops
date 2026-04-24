@@ -29,4 +29,4 @@ spec:
             - name: REDIS_URL
               value: "redis://:$(REDIS_PASSWORD)@redis-master.data.svc.cluster.local:6379/0"
             - name: DATABASE_URL
-              value: "postgresql://postgres:$(DB_PASSWORD)@postgres-postgresql-ha-pgpool.data.svc.cluster.local:5432/banking"
+              value: "postgresql://postgres:$(DB_PASSWORD)@postgres-postgresql.data.svc.cluster.local:5432/banking"
