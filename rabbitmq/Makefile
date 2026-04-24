@@ -33,9 +33,9 @@ generate: clean
 	@echo "  - base" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@if [ -f $(KUSTOMIZE_DIR)/externalsecret.yaml ]; then echo "  - externalsecret.yaml" >> $(KUSTOMIZE_DIR)/kustomization.yaml; fi
 	@if ls $(KUSTOMIZE_DIR)/*-patch.yaml 1> /dev/null 2>&1; then \
-		echo "patchesStrategicMerge:" >> $(KUSTOMIZE_DIR)/kustomization.yaml; \
+		echo "patches:" >> $(KUSTOMIZE_DIR)/kustomization.yaml; \
 		for f in $$(ls $(KUSTOMIZE_DIR)/*-patch.yaml); do \
-			echo "  - $$(basename $$f)" >> $(KUSTOMIZE_DIR)/kustomization.yaml; \
+			echo "  - path: $$(basename $$f)" >> $(KUSTOMIZE_DIR)/kustomization.yaml; \
 		done; \
 	fi
 	@echo "📝 Generating base/kustomization.yaml for $(ENV)..."
