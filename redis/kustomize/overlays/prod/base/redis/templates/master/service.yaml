@@ -1,9 +1,9 @@
 ---
-# Source: redis/templates/replicas/service.yaml
+# Source: redis/templates/master/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-replicas
+  name: redis-master
   namespace: "data"
   labels:
     app.kubernetes.io/instance: redis
@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
     helm.sh/chart: redis-25.4.0
-    app.kubernetes.io/component: replica
+    app.kubernetes.io/component: master
 spec:
   type: ClusterIP
   internalTrafficPolicy: Cluster
@@ -23,4 +23,4 @@ spec:
   selector:
     app.kubernetes.io/instance: redis
     app.kubernetes.io/name: redis
-    app.kubernetes.io/component: replica
+    app.kubernetes.io/component: master

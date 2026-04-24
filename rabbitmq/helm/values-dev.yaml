@@ -1,8 +1,20 @@
+replicaCount: 1
+
 auth:
   existingPasswordSecret: vault-rabbitmq-secret
   existingErlangSecret: vault-rabbitmq-secret
+
 image:
   registry: public.ecr.aws
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
 global:
   security:
     allowInsecureImages: true

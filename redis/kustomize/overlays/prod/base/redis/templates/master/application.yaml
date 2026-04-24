@@ -1,9 +1,9 @@
 ---
-# Source: redis/templates/replicas/application.yaml
+# Source: redis/templates/master/application.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: redis-replicas
+  name: redis-master
   namespace: "data"
   labels:
     app.kubernetes.io/instance: redis
@@ -11,15 +11,15 @@ metadata:
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
     helm.sh/chart: redis-25.4.0
-    app.kubernetes.io/component: replica
+    app.kubernetes.io/component: master
 spec:
-  replicas: 3
+  replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       app.kubernetes.io/instance: redis
       app.kubernetes.io/name: redis
-      app.kubernetes.io/component: replica
+      app.kubernetes.io/component: master
   serviceName: redis-headless
   updateStrategy:
     type: RollingUpdate
@@ -31,11 +31,11 @@ spec:
         app.kubernetes.io/name: redis
         app.kubernetes.io/version: 8.6.2
         helm.sh/chart: redis-25.4.0
-        app.kubernetes.io/component: replica
+        app.kubernetes.io/component: master
       annotations:
         checksum/configmap: 95944ee35a19af37cefd156f19d93e157e578c1dc63ac01ce735ae93090b7580
         checksum/health: a2fc61ae99390643dac0673ed97203805136d4460b2319e7beff10546c1e1140
-        checksum/scripts: 49be2ea80dba2a252f0de1c7ca7b9251d90ce2abea9e502473feb297e05edfa6
+        checksum/scripts: 0717e77fd3bb941f602860e9be4f2ed87b481cddeadf37be463f8512ecde0c3e
     spec:
       
       securityContext:
@@ -43,7 +43,7 @@ spec:
         fsGroupChangePolicy: Always
         supplementalGroups: []
         sysctls: []
-      serviceAccountName: redis-replica
+      serviceAccountName: redis-master
       automountServiceAccountToken: false
       affinity:
         podAffinity:
@@ -55,7 +55,7 @@ spec:
                   matchLabels:
                     app.kubernetes.io/instance: redis
                     app.kubernetes.io/name: redis
-                    app.kubernetes.io/component: replica
+                    app.kubernetes.io/component: master
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
@@ -82,23 +82,17 @@ spec:
             - /bin/bash
           args:
             - -ec
-            - /opt/bitnami/scripts/start-scripts/start-replica.sh
+            - /opt/bitnami/scripts/start-scripts/start-master.sh
           env:
             - name: BITNAMI_DEBUG
               value: "false"
             - name: REDIS_REPLICATION_MODE
-              value: replica
-            - name: REDIS_MASTER_HOST
-              value: redis-master-0.redis-headless.data.svc.cluster.local
-            - name: REDIS_MASTER_PORT_NUMBER
-              value: "6379"
-            - name: OPENSSL_FIPS
-              value: "yes"
+              value: master
             - name: ALLOW_EMPTY_PASSWORD
               value: "no"
+            - name: OPENSSL_FIPS
+              value: "yes"
             - name: REDIS_PASSWORD_FILE
-              value: "/opt/bitnami/redis/secrets/redis-password"
-            - name: REDIS_MASTER_PASSWORD_FILE
               value: "/opt/bitnami/redis/secrets/redis-password"
             - name: REDIS_TLS_ENABLED
               value: "no"
@@ -107,17 +101,10 @@ spec:
           ports:
             - name: redis
               containerPort: 6379
-          startupProbe:
-            failureThreshold: 22
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 5
-            tcpSocket:
-              port: redis
           livenessProbe:
             initialDelaySeconds: 20
             periodSeconds: 5
+            # One second longer than command timeout should prevent generation of zombie processes.
             timeoutSeconds: 6
             successThreshold: 1
             failureThreshold: 5
@@ -125,7 +112,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - "/health/ping_liveness_local_and_master.sh 5"
+                - "/health/ping_liveness_local.sh 5"
           readinessProbe:
             initialDelaySeconds: 20
             periodSeconds: 5
@@ -136,15 +123,13 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - "/health/ping_readiness_local_and_master.sh 1"
+                - "/health/ping_readiness_local.sh 1"
           resources:
             limits:
-              cpu: 150m
-              ephemeral-storage: 2Gi
-              memory: 192Mi
+              cpu: 250m
+              memory: 256Mi
             requests:
               cpu: 100m
-              ephemeral-storage: 50Mi
               memory: 128Mi
           volumeMounts:
             - name: start-scripts
@@ -158,7 +143,7 @@ spec:
             - name: config
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: empty-dir
-              mountPath: /opt/bitnami/redis/etc
+              mountPath: /opt/bitnami/redis/etc/
               subPath: app-conf-dir
             - name: empty-dir
               mountPath: /tmp
@@ -192,7 +177,7 @@ spec:
         labels:
           app.kubernetes.io/instance: redis
           app.kubernetes.io/name: redis
-          app.kubernetes.io/component: replica
+          app.kubernetes.io/component: master
       spec:
         accessModes:
           - "ReadWriteOnce"
