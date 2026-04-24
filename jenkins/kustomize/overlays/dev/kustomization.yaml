@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - base
   - externalsecret.yaml
+  - resources/jenkins-route.yaml
 patchesStrategicMerge:
   - jenkins-config-patch.yaml
+  - resources-patch.yaml
