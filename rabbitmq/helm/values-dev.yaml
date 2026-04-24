@@ -1,6 +1,7 @@
 replicaCount: 1
 
 auth:
+  securePassword: false
   existingPasswordSecret: vault-rabbitmq-secret
   existingErlangSecret: vault-rabbitmq-secret
 
