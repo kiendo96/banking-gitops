@@ -20,6 +20,10 @@ extraVolumes:
   - name: app-volume
     emptyDir: {}
 
+extraEnvVars:
+  - name: RABBITMQ_SECURE_PASSWORD
+    value: "no"
+
 extraVolumeMounts:
   - name: app-volume
     mountPath: /app
