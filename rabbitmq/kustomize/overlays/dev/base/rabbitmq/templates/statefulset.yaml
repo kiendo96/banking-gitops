@@ -234,6 +234,8 @@ spec:
               mountPath: /opt/bitnami/rabbitmq/.rabbitmq/mnesia
             - name: rabbitmq-secrets
               mountPath: /opt/bitnami/rabbitmq/secrets
+            - mountPath: /app
+              name: app-volume
       volumes:
         - name: empty-dir
           emptyDir: {}
@@ -249,6 +251,8 @@ spec:
                   name: vault-rabbitmq-secret
               - secret:
                   name: vault-rabbitmq-secret
+        - emptyDir: {}
+          name: app-volume
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
