@@ -30,4 +30,4 @@ spec:
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/name: rabbitmq
   publishNotReadyAddresses: true
-  trafficDistribution: PreferClose
+  trafficDistribution:

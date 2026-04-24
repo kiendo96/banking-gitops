@@ -1,5 +1,8 @@
 replicaCount: 1
 
+service:
+  trafficDistribution: ""
+
 auth:
   securePassword: false
   existingPasswordSecret: vault-rabbitmq-secret
