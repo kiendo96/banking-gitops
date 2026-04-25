@@ -43,9 +43,9 @@ spec:
         app.kubernetes.io/component: registry
       annotations:
         checksum/configmap: 19ee4a759e475295e53e0e4be86fc7de25b5f63ef3b768ab9c1bfe16a4f9b332
-        checksum/secret: fde1e0e5e75680aa4e89914063d4018086668a67772a686134bc369d29858557
-        checksum/secret-jobservice: 1e41a3ce581b799f186e1da6be315d0a8bea0009f49bcaed7a1e4058174b546e
-        checksum/secret-core: 336a478b3bccdbf91419395c83b65024433171ce393e9010eeb8c1f7134dce83
+        checksum/secret: c4716b360961122ed3b1f4041d599a2b822f8dd67a54e3358fb4b5942a2e206e
+        checksum/secret-jobservice: 5911647f5ffc7b663a28f05c12fcf7a9cb8873104859018df8b2adfbe9f4a40c
+        checksum/secret-core: 21aa9daf3321ada7946901bf76c2f688264dd796fa4173209908dc41c54d55de
     spec:
       securityContext:
         runAsUser: 10000
@@ -84,6 +84,11 @@ spec:
         - secretRef:
             name: "harbor-registry"
         env:
+        - name: REGISTRY_HTTP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: harbor-secrets
+              key: REGISTRY_HTTP_SECRET
         ports:
         - containerPort: 5000
         - containerPort: 5001
@@ -131,15 +136,20 @@ spec:
         - secretRef:
             name: "harbor-registryctl"
         env:
+        - name: REGISTRY_HTTP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: harbor-secrets
+              key: REGISTRY_HTTP_SECRET
         - name: CORE_SECRET
           valueFrom:
             secretKeyRef:
-              name: harbor-core
+              name: harbor-secrets
               key: secret
         - name: JOBSERVICE_SECRET
           valueFrom:
             secretKeyRef:
-              name: harbor-jobservice
+              name: harbor-secrets
               key: JOBSERVICE_SECRET
         ports:
         - containerPort: 8080

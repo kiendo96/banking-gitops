@@ -40,9 +40,9 @@ spec:
         component: core
         app.kubernetes.io/component: core
       annotations:
-        checksum/configmap: 1a00d29e05fcf7e69722e4c4edd9fea40e5054d02cd2441f4b2fb129a2c01b1f
-        checksum/secret: a50cf306cf22bd4a427381c6d38b6731aff747376bf834f8ef9d8214c823b5d5
-        checksum/secret-jobservice: 8700eda4eca239b66e51dff5191a1f065bbdda15f9f6f5f1e338f026675ba94c
+        checksum/configmap: bb0a484e3552f321d64284db20e5e20462204d617db067fb64b66b15754689fb
+        checksum/secret: 615d2802090ba5e9cb693b52d87274cf9bf7e08e54f6f334a124647ea442b019
+        checksum/secret-jobservice: 5911647f5ffc7b663a28f05c12fcf7a9cb8873104859018df8b2adfbe9f4a40c
     spec:
       securityContext:
         runAsUser: 10000
@@ -84,13 +84,18 @@ spec:
           - name: CORE_SECRET
             valueFrom:
               secretKeyRef:
-                name: harbor-core
+                name: harbor-secrets
                 key: secret
           - name: JOBSERVICE_SECRET
             valueFrom:
               secretKeyRef:
-                name: harbor-jobservice
+                name: harbor-secrets
                 key: JOBSERVICE_SECRET
+          - name: HARBOR_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: harbor-secrets
+                key: HARBOR_ADMIN_PASSWORD
         securityContext: 
           allowPrivilegeEscalation: false
           capabilities:

@@ -44,8 +44,8 @@ spec:
       annotations:
         checksum/configmap: f337f0cc8009911a8e897e975c6c2c1d47496b292496174d35b41e2aa14cc46d
         checksum/configmap-env: add737773f58943f66eff6298294138c2eac8a2b9081a64136215a9eafc2a11a
-        checksum/secret: ecda3401bddee1af3bd615ea599f407e3a7d307f6b7561680c4058bc31112614
-        checksum/secret-core: 31cec704e944ad4966560ab4d3ab3c2bad928f8e8ee03cde6d4ecf1e3ceca1e1
+        checksum/secret: 5911647f5ffc7b663a28f05c12fcf7a9cb8873104859018df8b2adfbe9f4a40c
+        checksum/secret-core: 2ed7820abddaaf931f5cced29c24115c9b91a7df7532ff52bb4ad300899c68bc
     spec:
       securityContext:
         runAsUser: 10000
@@ -74,8 +74,13 @@ spec:
           - name: CORE_SECRET
             valueFrom:
               secretKeyRef:
-                name: harbor-core
+                name: harbor-secrets
                 key: secret
+          - name: JOBSERVICE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: harbor-secrets
+                key: JOBSERVICE_SECRET
         securityContext: 
           allowPrivilegeEscalation: false
           capabilities:

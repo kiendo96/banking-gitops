@@ -81,6 +81,7 @@ $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault
 $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/redis redis-password='super-secure-redis-password'"
 $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/rabbitmq rabbitmq-password='super-secure-rmq-password' rabbitmq-erlang-cookie='secure-erlang-cookie-xyz'"
 $VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/jenkins jenkins-admin-password='admin' jenkins-admin-user='admin'"
+$VAULT_CMD sh -c "VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN vault kv put secret/harbor admin-password='Harbor12345' core-secret='16charcoresecret' jobservice-secret='16charjobservice' registry-secret='16charregistrysc' postgres-password='super-secure-pg-password' redis-password='super-secure-redis-password'"
 
 echo "Configuring App secrets..."
 for app in auth-service account-service transfer-service notification-service; do

@@ -2,3 +2,25 @@ expose:
   type: clusterIP
   tls:
     enabled: false
+
+externalURL: https://harbor.local
+
+existingSecretAdminPassword: harbor-secrets
+existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
+
+core:
+  existingSecret: harbor-secrets
+
+jobservice:
+  existingSecret: harbor-secrets
+
+registry:
+  existingSecret: harbor-secrets
+
+database:
+  internal:
+    existingSecret: harbor-secrets
+
+redis:
+  internal:
+    existingSecret: harbor-secrets
