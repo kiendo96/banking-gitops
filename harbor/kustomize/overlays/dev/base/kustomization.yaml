@@ -3,16 +3,13 @@ kind: Kustomization
 resources:
   - harbor/templates/core/core-cm.yaml
   - harbor/templates/core/core-dpl.yaml
-  - harbor/templates/core/core-secret.yaml
   - harbor/templates/core/core-svc.yaml
-  - harbor/templates/database/database-secret.yaml
   - harbor/templates/database/database-ss.yaml
   - harbor/templates/database/database-svc.yaml
   - harbor/templates/jobservice/jobservice-cm-env.yaml
   - harbor/templates/jobservice/jobservice-cm.yaml
   - harbor/templates/jobservice/jobservice-dpl.yaml
   - harbor/templates/jobservice/jobservice-pvc.yaml
-  - harbor/templates/jobservice/jobservice-secrets.yaml
   - harbor/templates/jobservice/jobservice-svc.yaml
   - harbor/templates/nginx/configmap-http.yaml
   - harbor/templates/nginx/deployment.yaml
@@ -25,10 +22,7 @@ resources:
   - harbor/templates/registry/registry-cm.yaml
   - harbor/templates/registry/registry-dpl.yaml
   - harbor/templates/registry/registry-pvc.yaml
-  - harbor/templates/registry/registry-secret.yaml
   - harbor/templates/registry/registry-svc.yaml
   - harbor/templates/registry/registryctl-cm.yaml
-  - harbor/templates/registry/registryctl-secret.yaml
-  - harbor/templates/trivy/trivy-secret.yaml
   - harbor/templates/trivy/trivy-sts.yaml
   - harbor/templates/trivy/trivy-svc.yaml

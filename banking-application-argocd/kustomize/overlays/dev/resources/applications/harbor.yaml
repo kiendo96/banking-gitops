@@ -13,7 +13,6 @@ spec:
     server: 'https://kubernetes.default.svc'
     namespace: harbor
   syncPolicy:
-    automated:
-      prune: false
+    automated: {}
     syncOptions:
       - CreateNamespace=true

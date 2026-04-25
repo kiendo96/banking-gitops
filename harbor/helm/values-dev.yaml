@@ -10,6 +10,7 @@ existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
 
 core:
   existingSecret: harbor-secrets
+  xsrfKey: "unused-but-required" # Helm check, actual value from harbor-secrets
 
 jobservice:
   existingSecret: harbor-secrets
@@ -24,3 +25,6 @@ database:
 redis:
   internal:
     existingSecret: harbor-secrets
+
+trivy:
+  existingSecret: harbor-secrets
