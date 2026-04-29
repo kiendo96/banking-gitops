@@ -10,7 +10,7 @@ existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
 
 core:
   existingSecret: harbor-secrets
-  xsrfKey: "unused-but-required" # Helm check, actual value from harbor-secrets
+  xsrfKey: "unused-but-required-32-chars-now" # Helm check, actual value from harbor-secrets
 
 jobservice:
   existingSecret: harbor-secrets

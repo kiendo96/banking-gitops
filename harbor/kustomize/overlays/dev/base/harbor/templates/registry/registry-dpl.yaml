@@ -43,9 +43,9 @@ spec:
         app.kubernetes.io/component: registry
       annotations:
         checksum/configmap: 19ee4a759e475295e53e0e4be86fc7de25b5f63ef3b768ab9c1bfe16a4f9b332
-        checksum/secret: 885f1797e6e798f0df7134220a1534b12fb5e5c4d72d1b8d71e72d61097c50d0
+        checksum/secret: cb358213471c6cde9d1f92538a9669264d32cd85974fc9f1356f41df2479b51d
         checksum/secret-jobservice: 5911647f5ffc7b663a28f05c12fcf7a9cb8873104859018df8b2adfbe9f4a40c
-        checksum/secret-core: aba5be67af6db71acb42b20a82e58f47d60bf50d8db1ef8781746d64f81352dd
+        checksum/secret-core: 0aaf330e612a532fe0aee03de70610aaa2c65b05ec7c2d3aa29d64362d9a82f3
     spec:
       securityContext:
         runAsUser: 10000
