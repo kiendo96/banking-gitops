@@ -33,8 +33,7 @@ generate: clean
 	@echo "  - base" >> $(KUSTOMIZE_DIR)/kustomization.yaml
 	@if [ -f $(KUSTOMIZE_DIR)/externalsecret.yaml ]; then echo "  - externalsecret.yaml" >> $(KUSTOMIZE_DIR)/kustomization.yaml; fi
 	@if [ -f $(KUSTOMIZE_DIR)/resources/harbor-route.yaml ]; then echo "  - resources/harbor-route.yaml" >> $(KUSTOMIZE_DIR)/kustomization.yaml; fi
-	@echo "🧹 Removing redundant Helm-generated secrets (managed by ExternalSecret)..."
-	@find $(OUTPUT_DIR) -name "*secret*.yaml" -delete
+	@echo "✅ Keeping Helm-generated secrets (required for internal TLS and tokens)..."
 	@echo "📝 Generating base/kustomization.yaml for $(ENV)..."
 	@echo "apiVersion: kustomize.config.k8s.io/v1beta1" > $(OUTPUT_DIR)/kustomization.yaml
 	@echo "kind: Kustomization" >> $(OUTPUT_DIR)/kustomization.yaml
